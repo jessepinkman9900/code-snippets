@@ -6,17 +6,31 @@
     {
       "path": "."
     },
+    // {
+    //   "path": "pulumi-python/clickhouse",
+    //   "settings": {
+    //     "python.defaultInterpreterPath": ".venv/bin/python"
+    //   }
+    // },
+    // {
+    //   "path": "realtime-data-streaming"
+    // },
+    // {
+    //   "path": "tg-bot",
+    // },
+    // {
+    //   "path": "markdown-bot",
+    // }
+    // {
+    //   "path": "sp1-fibonacci"
+    // },
     {
-      "path": "pulumi-python/clickhouse",
+      "path": "uni-v4-points-hook",
       "settings": {
-        "python.defaultInterpreterPath": ".venv/bin/python"
+        "solidity.formatter": "forge",
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4
       }
-    },
-    {
-      "path": "realtime-data-streaming"
-    },
-    {
-      "path": "tg-bot",
     }
   ],
 }
