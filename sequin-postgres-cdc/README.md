@@ -41,3 +41,12 @@ curl -sf https://raw.githubusercontent.com/sequinstream/sequin/main/cli/installe
 
 ## Notes
 - when you set a BATCH_SIZE - ordering of events in a batch is not guaranteed
+
+
+## Todo
+- multiple tables with high volume using 1 replication slot. how does partitioning help w load
+- ordering guarantee
+- what happens if i run sequin without redis
+- what happens if i run multiple sequin instances
+- latency in cloud deployment
+- good batch size at 1000 inserts/sec
