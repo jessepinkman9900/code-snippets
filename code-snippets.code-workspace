@@ -4,8 +4,11 @@
       "path": ".github/workflows"
     },
     {
-      "path": "."
+      "path": "code-snippets.code-workspace"
     },
+    // {
+    //   "path": "."
+    // },
     // {
     //   "path": "pulumi-python/clickhouse",
     //   "settings": {
@@ -24,21 +27,27 @@
     // {
     //   "path": "sp1-fibonacci"
     // },
+    // {
+    //   "path": "nft",
+    //   "settings": {
+    //     "solidity.formatter": "forge",
+    //     "editor.insertSpaces": true,
+    //     "editor.tabSize": 4,
+    //     "solidity.packageDefaultDependenciesContractsDirectory": "src",
+    //     "solidity.packageDefaultDependenciesDirectory": "lib",
+    //     "[solidity]": {
+    //       "editor.defaultFormatter": "JuanBlanco.solidity"
+    //     },
+    //     "solidity.remappings": [
+    //       "forge-std/=lib/forge-std/src/"
+    //     ]
+    //   }
+    // },
     {
-      "path": "nft",
-      "settings": {
-        "solidity.formatter": "forge",
-        "editor.insertSpaces": true,
-        "editor.tabSize": 4,
-        "solidity.packageDefaultDependenciesContractsDirectory": "src",
-        "solidity.packageDefaultDependenciesDirectory": "lib",
-        "[solidity]": {
-          "editor.defaultFormatter": "JuanBlanco.solidity" 
-        },
-        "solidity.remappings": [
-          "forge-std/=lib/forge-std/src/"
-        ]
-      }
+      "path": "sequin-postgres-cdc",
+    },
+    {
+      "path": "postgres-stream-using-watermark-table"
     }
   ],
 }

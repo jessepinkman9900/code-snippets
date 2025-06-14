@@ -51,6 +51,7 @@ curl -sf https://raw.githubusercontent.com/sequinstream/sequin/main/cli/installe
 - latency in cloud deployment
 - good batch size at 1000 inserts/sec
 - idempotency key on backfills
+- running in k8s
 - nice to have
     - transforms & filters
     - audit logs
