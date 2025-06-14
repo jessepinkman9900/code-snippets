@@ -8,7 +8,8 @@ contract CounterTest is Test {
     Counter public counter;
 
     function setUp() public {
-        counter = new Counter();
+        bytes32 salt = keccak256("counter");
+        counter = new Counter{salt: salt}();
         counter.setNumber(0);
     }
 
