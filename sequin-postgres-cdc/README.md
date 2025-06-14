@@ -69,3 +69,8 @@ graph LR
     E[Postgres-Source] --> B
     B --> D[Kafka]
 ```
+
+## Performance
+- [debezium](https://estuary.dev/blog/debezium-cdc-pain-points/)
+- [sequin](https://sequinstream.com/docs/performance)
+- [debezium vs sequin benchmark](https://github.com/sequinstream/sequin-vs-debezium-benchmark/tree/main)
