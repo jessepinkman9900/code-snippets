@@ -1,0 +1,23 @@
+[private]
+default:
+    just --list
+
+setup:
+  mise install
+  pre-commit install
+
+[group('app')]
+run:
+  ./mvnw spring-boot:run
+
+[group('app')]
+test:
+  ./mvnw test
+
+[group('docker')]
+up:
+  docker compose up -d
+
+[group('docker')]
+down:
+  docker compose down -v
