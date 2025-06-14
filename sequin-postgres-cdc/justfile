@@ -14,7 +14,7 @@ up:
 
 [group('docker')]
 down:
-  cd docker && docker compose down
+  cd docker && docker compose down -v
 
 [group('load-test')]
 run:

@@ -11,5 +11,26 @@ databases:
     hostname: "sequin_postgres"
     database: "sequin_playground"
     port: 5432
-    slot_name: "sequin_slot"
-    publication_name: "sequin_pub"
+    slot:
+      name: "sequin_slot"
+      create_if_not_exists: false
+    publication:
+      name: "sequin_pub"
+      create_if_not_exists: false
+sinks:
+  - name: "postgres-cdc-kafka-sink"
+    database: "sequin-playground"
+    source:
+      include_schemas:
+        - "public"
+    status: "active"
+    actions:
+      - insert
+      - update
+      - delete
+    batch_size: 10
+    destination:
+      type: "kafka"
+      hosts: "broker:9092,broker:9094"
+      topic: "postgres-cdc"
+      tls: false
