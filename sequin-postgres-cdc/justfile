@@ -1,0 +1,21 @@
+[private]
+default:
+    just --list
+
+setup:
+  mise install
+  pre-commit install
+  cd load-tests && go install go.k6.io/xk6/cmd/xk6@latest
+  cd load-tests && xk6 build --with github.com/grafana/xk6-sql --with github.com/grafana/xk6-sql-driver-postgres
+
+[group('docker')]
+up:
+  cd docker && docker compose up -d
+
+[group('docker')]
+down:
+  cd docker && docker compose down
+
+[group('load-test')]
+run:
+  cd load-tests && ./k6 run insert-data.js
