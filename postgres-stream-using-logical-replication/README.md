@@ -16,6 +16,17 @@ This application demonstrates Change Data Capture (CDC) from PostgreSQL using De
 - PostgreSQL 14+
 - Docker (for Kafka, if needed)
 
+## Usage
+```bash
+just setup # install dependencies
+just up # setup postgres & kafka
+just run # run the application
+just load # insert data into postgres
+# kafka ui - http://localhost:8088
+
+just down # stop postgres & kafka
+```
+
 ## Configuration
 
 Update the `application.yml` with your PostgreSQL connection details:
