@@ -6,6 +6,9 @@
 - 2 implementations for applying rules
   - [TransactionService](src/main/java/com/code_snippets/drools_rule_engine/service/TransactionService.java) - apply rules in service method
   - [AspectTransactionService](src/main/java/com/code_snippets/drools_rule_engine/service/AspectTransactionService.java) - apply rules using aspect
+      - not working - aspect not triggered
+      - aspect probably better for usecases like logging function execution time or metrics
+
 
 ## Quick Start
 

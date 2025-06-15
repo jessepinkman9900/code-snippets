@@ -26,4 +26,10 @@ public class TransactionService {
     logger.info("Transaction validation result: {}", transaction);
     return new Response<>(transaction, validationResult);
   }
+
+  public Response<Transaction, ValidationResult> processTransaction(Transaction transaction) {
+    logger.info("Processing transaction: {}", transaction);
+    Response<Transaction, ValidationResult> response = validateTransaction(transaction);
+    return response;
+  }
 }

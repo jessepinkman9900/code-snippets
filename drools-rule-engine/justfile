@@ -19,10 +19,17 @@ run:
 test:
   ./mvnw test
 
-# curl api call
+# curl api call /api/transactions/validate
 [group('api')]
 api type='deposit' currency='USD':
   curl --location 'localhost:8080/api/transactions/validate' \
+  --header 'Content-Type: application/json' \
+  --data '{"id": 1, "type": "{{type}}", "currency": "{{currency}}", "amount": 100.00}'
+
+# curl api call /api/transactions/validate/aspect
+[group('api')]
+api-aspect type='deposit' currency='USD':
+  curl --location 'localhost:8080/api/transactions/validate/aspect' \
   --header 'Content-Type: application/json' \
   --data '{"id": 1, "type": "{{type}}", "currency": "{{currency}}", "amount": 100.00}'
 
