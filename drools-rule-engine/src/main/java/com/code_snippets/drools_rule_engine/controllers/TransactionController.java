@@ -1,6 +1,8 @@
 package com.code_snippets.drools_rule_engine.controllers;
 
+import com.code_snippets.drools_rule_engine.models.Response;
 import com.code_snippets.drools_rule_engine.models.Transaction;
+import com.code_snippets.drools_rule_engine.models.ValidationResult;
 import com.code_snippets.drools_rule_engine.service.TransactionService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +19,8 @@ public class TransactionController {
   }
 
   @PostMapping("/validate")
-  public Transaction validateTransaction(@RequestBody Transaction transaction) {
+  public Response<Transaction, ValidationResult> validateTransaction(
+      @RequestBody Transaction transaction) {
     return transactionService.validateTransaction(transaction);
   }
 }

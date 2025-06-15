@@ -5,11 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Transaction {
-  private String id;
-  private String type;
-  private double amount;
-  private String currency;
+@NoArgsConstructor
+public class Response<T, V> {
+  public T request;
+  public V validation;
 }
