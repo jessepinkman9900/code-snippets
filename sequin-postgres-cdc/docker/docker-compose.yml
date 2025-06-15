@@ -50,6 +50,19 @@ services:
     command: ["redis-server", "--port", "6379"]
     volumes:
       - sequin_redis_data:/data
+  redis_insight:
+    image: redislabs/redisinsight:2.70
+    container_name: redis_insight
+    ports:
+      - "5540:5540"
+    environment:
+      - RI_REDIS_HOST=sequin_redis
+      - RI_REDIS_PORT=6379
+      - RI_REDIS_ALIAS=sequin_redis
+    volumes:
+      - redis_insight_data:/db
+    depends_on:
+      - sequin_redis
   sequin_prometheus:
     image: prom/prometheus
     volumes:
@@ -114,6 +127,7 @@ services:
 volumes:
   sequin_postgres_data:
   sequin_redis_data:
+  redis_insight_data:
   sequin_grafana_data:
 
 # Un-comment this to enable IPv6
