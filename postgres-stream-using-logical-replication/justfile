@@ -5,6 +5,8 @@ default:
 setup:
   mise install
   pre-commit install
+  cd load-tests && go install go.k6.io/xk6/cmd/xk6@latest
+  cd load-tests && xk6 build --with github.com/grafana/xk6-sql --with github.com/grafana/xk6-sql-driver-postgres
 
 [group('app')]
 run:
@@ -14,10 +16,18 @@ run:
 test:
   ./mvnw test
 
+[group('fmt')]
+fmt:
+  ./mvnw com.spotify.fmt:fmt-maven-plugin:format
+
 [group('docker')]
-up:
-  docker compose up -d
+up: down
+  cd docker && docker compose up -d
 
 [group('docker')]
 down:
-  docker compose down -v
+  cd docker && docker compose down -v
+
+[group('load-test')]
+load:
+  cd load-tests && ./k6 run insert-data.js

@@ -1,0 +1,42 @@
+# spring:
+#   kafka:
+#     bootstrap-servers: localhost:9092,localhost:9094
+#     producer:
+#       key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#       properties:
+#         spring.json.add.type.headers: false
+
+# PostgreSQL Configuration
+application:
+  postgres:
+    url: jdbc:postgresql://localhost:5432/operational_db
+    username: usr
+    password: pwd
+    replication:
+      plugin_name: pgoutput
+      slot_name: app_slot
+      publication_names: app_pub
+      server_name: dbserver1
+      offset_storage: /tmp/offsets.dat
+      offset_flush_interval_ms: 60000
+      table_include_list: public.*
+      include_schema_changes: false
+      snapshot_mode: never
+    status_interval_ms: 1000
+  # Kafka Configuration
+  kafka:
+    topic_name: postgres-cdc
+    bootstrap_servers: localhost:9094 # Using the external port exposed by Docker
+    consumer_group_id: debezium-consumer-group
+    offset_storage_topic: debezium_offsets
+    offset_storage_partitions: 1
+    offset_storage_replication_factor: 1
+    # Performance tuning
+    max_poll_records: 500
+    max_poll_interval_ms: 300000
+    session_timeout_ms: 10000
+    heartbeat_interval_ms: 3000
+    auto_offset_reset: earliest
+    enable_auto_commit: true
+    auto_commit_interval_ms: 5000

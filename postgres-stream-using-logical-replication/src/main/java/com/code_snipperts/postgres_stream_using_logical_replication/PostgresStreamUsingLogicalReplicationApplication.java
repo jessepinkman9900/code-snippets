@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class PostgresStreamUsingLogicalReplicationApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PostgresStreamUsingLogicalReplicationApplication.class, args);
-	}
-
+  public static void main(String[] args) {
+    SpringApplication.run(PostgresStreamUsingLogicalReplicationApplication.class, args);
+  }
 }
