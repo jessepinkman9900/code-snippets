@@ -2,6 +2,18 @@
 
 This application demonstrates Change Data Capture (CDC) from PostgreSQL using Debezium. It captures database changes and processes them in real-time.
 
+## Todo
+- handle failure & restarts
+- handling multiple tables from one slot & publish to one topic
+- increasing throughput through batching
+- loading historical data
+- replaying data
+- consistency guarantees
+  - exactly once or at-least once, can you get it near exactly once?
+  - no missing data
+- metrics on processing volume
+
+
 ## Features
 
 - Real-time change capture from PostgreSQL using Debezium
@@ -80,7 +92,3 @@ The application uses Debezium's embedded engine to capture changes from PostgreS
 - `table_include_list`: Tables to include in change capture (e.g., public.*)
 - `include_schema_changes`: Whether to include schema changes (default: false)
 - `snapshot_mode`: When to take snapshots (default: never)
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
