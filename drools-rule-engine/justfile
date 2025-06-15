@@ -2,38 +2,43 @@
 default:
     just --list
 
+# install dependencies/tools
 setup:
   mise install
   pre-commit install
   cd load-tests && go install go.k6.io/xk6/cmd/xk6@latest
   cd load-tests && xk6 build --with github.com/grafana/xk6-sql --with github.com/grafana/xk6-sql-driver-postgres
 
+# start spring boot web server
 [group('app')]
 run:
   ./mvnw spring-boot:run
 
+# run maven tests
 [group('app')]
 test:
   ./mvnw test
 
+# curl api call
 [group('api')]
-api currency='USD':
+api type='deposit' currency='USD':
   curl --location 'localhost:8080/api/transactions/validate' \
   --header 'Content-Type: application/json' \
-  --data '{"id": 1, "type": "deposit", "currency": "{{currency}}", "amount": 100.00}'
+  --data '{"id": 1, "type": "{{type}}", "currency": "{{currency}}", "amount": 100.00}'
 
+# format java code
 [group('fmt')]
 fmt:
   ./mvnw com.spotify.fmt:fmt-maven-plugin:format
 
-[group('docker')]
-up: down
-  cd docker && docker compose up -d
+# [group('docker')]
+# up: down
+#   cd docker && docker compose up -d
 
-[group('docker')]
-down:
-  cd docker && docker compose down -v
+# [group('docker')]
+# down:
+#   cd docker && docker compose down -v
 
-[group('load-test')]
-load:
-  cd load-tests && ./k6 run insert-data.js
+# [group('load-test')]
+# load:
+#   cd load-tests && ./k6 run insert-data.js

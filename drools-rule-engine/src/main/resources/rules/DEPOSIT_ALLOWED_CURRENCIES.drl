@@ -3,6 +3,16 @@ package com.code_snippets.drools_rule_engine.rules
 import com.code_snippets.drools_rule_engine.models.Transaction
 global com.code_snippets.drools_rule_engine.models.ValidationResult validationResult
 
+// only txn type deposit is allowed
+// salience is used to control priority of rules
+rule "Allow only deposit transactions" salience 10
+    when
+        $t: Transaction(type != "deposit")
+    then
+        validationResult.valid = false;
+        validationResult.message = "Transaction type " + $t.getType() + " is not supported";
+end
+
 // List of allowed currencies
 rule "Allow only supported currencies"
     when
