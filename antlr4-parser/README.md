@@ -1,4 +1,9 @@
 # antlr4-parser
+- can use antl4 grammer to gurantee structure of input data/files
+- workflow
+  - create grammar
+  - generate parser, lexer, etc
+  - use parser to validate input data/files in runtime
 
 ## Usage
 ```bash
