@@ -1,0 +1,28 @@
+[private]
+default:
+    just --list
+
+# install tools
+setup:
+  mise install
+  pre-commit install
+
+# gen parser, lexer, etc in language of choice
+[group('antlr')]
+gen file='JSON.g4' lang='Java':
+  uv run antlr4 -Dlanguage={{lang}} -o gen {{file}}
+
+# show parse tree in gui
+[group('antlr')]
+vis file='JSON.g4' input='test.json':
+  uv run antlr4-parse {{file}} json -gui {{input}}
+
+# show parse tree as text
+[group('antlr')]
+parse file='JSON.g4' input='test.json':
+  uv run antlr4-parse {{file}} json -tree {{input}}
+
+# remove generated files
+clean:
+  rm -rf gen/
+  rm -f *.interp *.tokens
