@@ -1,0 +1,133 @@
+name: redpanda-cluster
+networks:
+  redpanda_network:
+    driver: bridge
+volumes:
+  redpanda: null
+services:
+  # redpanda cluster + ui
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v${REDPANDA_VERSION:-24.3.2}
+    container_name: redpanda
+    command:
+      - redpanda start
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      # Address the broker advertises to clients that connect to the Kafka API.
+      # Use the internal addresses to connect to the Redpanda brokers
+      # from inside the same Docker network.
+      # Use the external addresses to connect to the Redpanda brokers
+      # from outside the Docker network.
+      - --advertise-kafka-addr internal://redpanda:9092,external://localhost:19092
+      - --pandaproxy-addr internal://0.0.0.0:8082,external://0.0.0.0:18082
+      # Address the broker advertises to clients that connect to the HTTP Proxy.
+      - --advertise-pandaproxy-addr internal://redpanda:8082,external://localhost:18082
+      - --schema-registry-addr internal://0.0.0.0:8081,external://0.0.0.0:18081
+      # Redpanda brokers use the RPC API to communicate with each other internally.
+      - --rpc-addr redpanda:33145
+      - --advertise-rpc-addr redpanda:33145
+      # Mode dev-container uses well-known configuration properties for development in containers.
+      - --mode dev-container
+      # Tells Seastar (the framework Redpanda uses under the hood) to use 1 core on the system.
+      - --smp 1
+    ports:
+      - 18081:18081
+      - 18082:18082
+      - 19092:19092
+      - 19644:9644
+    volumes:
+      - redpanda:/var/lib/redpanda/data
+    networks:
+      - redpanda_network
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster health | grep -E 'Healthy:.+true' || exit 1"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+  console:
+    image: docker.redpanda.com/redpandadata/console:v${REDPANDA_CONSOLE_VERSION:-2.8.1}
+    container_name: console
+    entrypoint: /bin/sh
+    command: -c "echo \"$$CONSOLE_CONFIG_FILE\" > /tmp/config.yml; /app/console"
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        kafka:
+          brokers: ["redpanda:9092"]
+          schemaRegistry:
+            enabled: true
+            urls: ["http://redpanda:8081"]
+        redpanda:
+          adminApi:
+            enabled: true
+            urls: ["http://redpanda:9644"]
+        connect:
+          enabled: true
+          clusters:
+            - name: local-connect-cluster
+              url: http://connect:8083
+    ports:
+      - 8080:8080
+    networks:
+      - redpanda_network
+    depends_on:
+      - redpanda
+  # source connector
+  source-connect:
+    image: docker.redpanda.com/redpandadata/connect
+    hostname: source-connect
+    container_name: source-connect
+    networks:
+      - redpanda_network
+    #platform: 'linux/amd64'
+    depends_on:
+      - redpanda
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./source-connect.yaml:/connect.yaml
+  # sink connector
+  sink-connect:
+    image: docker.redpanda.com/redpandadata/connect
+    hostname: sink-connect
+    container_name: sink-connect
+    networks:
+      - redpanda_network
+    depends_on:
+      - redpanda
+      - clickhouse
+    ports:
+      - "8084:8083"
+    volumes:
+      - ./sink-connect.yaml:/connect.yaml
+  # clickhouse
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.8
+    container_name: clickhouse
+    hostname: clickhouse
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - ./.clickhouse-data:/var/lib/clickhouse
+      - ./clickhouse-init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      CLICKHOUSE_USER: "default_user"
+      CLICKHOUSE_PASSWORD: "default_password"
+      CLICKHOUSE_DB: "default"
+    networks:
+      - redpanda_network
+  ch-ui:
+    image: ghcr.io/caioricciuti/ch-ui:latest
+    container_name: ch-ui
+    restart: always
+    ports:
+      - "5521:5521"
+    environment:
+      VITE_CLICKHOUSE_URL: "http://localhost:8123"
+      VITE_CLICKHOUSE_USER: "default_user"
+      VITE_CLICKHOUSE_PASS: "default_password"
+    networks:
+      - redpanda_network
+    depends_on:
+      - clickhouse

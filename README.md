@@ -9,7 +9,7 @@ Code snippets
   - use debezium engine + spring boot to consume postgres logical replication changes & publish to kafka
 - [pulumi-python/clickhouse](pulumi-python/clickhouse)
   - provision clickhouse cluster using pulumi IaaC
-- [realtime-data-streaming](realtime-data-streaming)
+- [websocket-redpanda-data-streaming](websocket-redpanda-data-streaming)
   - use redpanda connect to scrape websocket & publish to redpanda topic & sink to clickhouse db
 - [sequin-postgres-cdc](sequin-postgres-cdc)
   - use sequin to consume postgres logical replication changes & publish to kafka
