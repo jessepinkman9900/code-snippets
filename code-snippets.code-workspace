@@ -1,11 +1,11 @@
 {
   "folders": [
-    {
-      "path": ".github/workflows"
-    },
-    {
-      "path": "code-snippets.code-workspace"
-    },
+    // {
+    //   "path": ".github/workflows"
+    // },
+    // {
+    //   "path": "code-snippets.code-workspace"
+    // },
     // {
     //   "path": "."
     // },
@@ -43,11 +43,26 @@
     //     ]
     //   }
     // },
+    // {
+    //   "path": "sequin-postgres-cdc",
+    // },
+    // {
+    //   "path": "postgres-stream-using-watermark-table"
+    // },
+    // {
+    //   "path": "postgres-stream-using-logical-replication"
+    // },
+    // {
+    //   "path": "drools-rule-engine"
+    // },
+    // {
+    //   "path": "custom-rule-engine"
+    // },
+    // {
+    //   "path": "antlr4-parser"
+    // },
     {
-      "path": "sequin-postgres-cdc",
-    },
-    {
-      "path": "postgres-stream-using-watermark-table"
+      "path": "s3-redpanda-data-streaming"
     }
   ],
 }

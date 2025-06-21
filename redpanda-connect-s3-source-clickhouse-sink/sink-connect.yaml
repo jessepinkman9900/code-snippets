@@ -1,0 +1,86 @@
+http:
+  enabled: true
+  address: 0.0.0.0:4195
+  root_path: /benthos
+  debug_endpoints: false
+  cert_file: ""
+  key_file: ""
+  cors:
+    enabled: false
+    allowed_origins: []
+  basic_auth:
+    enabled: false
+    realm: restricted
+    username: ""
+    password_hash: ""
+    algorithm: sha256
+    salt: ""
+input:
+  kafka:
+    addresses: ["redpanda:9092"] # No default (required)
+    topics: ["json-l1-blocks"] # No default (required)
+    consumer_group: "clickhouse-sink-connect"
+    checkpoint_limit: 1
+buffer:
+  none: {}
+pipeline:
+  threads: -1
+  processors:
+    - mapping: |
+        root.height = this.header.height.int64()
+        root.header = this.header.string()
+        root.txns = this.txs.string()
+output:
+  sql_insert:
+    # expects table to be already created
+    driver: clickhouse
+    dsn: "clickhouse://default_user:default_password@clickhouse:9000/default"
+    table: "json_l1_blocks"
+    columns: ["height", "header", "transactions"]
+    args_mapping: root = [this.height, this.header, this.txns]
+input_resources: []
+processor_resources: []
+output_resources: []
+cache_resources: []
+rate_limit_resources: []
+logger:
+  level: INFO
+  format: logfmt
+  add_timestamp: false
+  level_name: level
+  timestamp_name: time
+  message_name: msg
+  static_fields:
+    '@service': redpanda-connect
+  file:
+    path: ""
+    rotate: false
+    rotate_max_age_days: 0
+metrics:
+  prometheus: {}
+  mapping: ""
+tracer:
+  none: {}
+shutdown_delay: 0s
+shutdown_timeout: 20s
+tests: []
+redpanda:
+  seed_brokers: []
+  client_id: benthos
+  tls:
+    enabled: false
+    skip_cert_verify: false
+    enable_renegotiation: false
+    root_cas: ""
+    root_cas_file: ""
+    client_certs: []
+  sasl: []
+  metadata_max_age: 5m
+  pipeline_id: ""
+  logs_topic: ""
+  logs_level: info
+  status_topic: ""
+  idempotent_write: true
+  timeout: 10s
+  max_message_bytes: 1MB
+  broker_write_max_bytes: 100MB

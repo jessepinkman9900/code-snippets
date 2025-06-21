@@ -1,0 +1,23 @@
+[private]
+default:
+    just --list
+
+# install dependencies/tools
+setup:
+  mise install
+  pre-commit install
+  # dotenvx
+  curl -sfS https://dotenvx.sh/install.sh | sh
+
+[group('docker')]
+up env='test': down
+  dotenvx run -f .env.{{env}} -- docker compose up -d
+
+[group('docker')]
+down:
+  docker compose down -v
+  rm -rf .redpanda-data .clickhouse-data
+
+# [group('load-test')]
+# load:
+#   cd load-tests && ./k6 run insert-data.js

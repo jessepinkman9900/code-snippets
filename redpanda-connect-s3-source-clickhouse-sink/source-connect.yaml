@@ -1,0 +1,91 @@
+http:
+  enabled: true
+  address: 0.0.0.0:4195
+  root_path: /benthos
+  debug_endpoints: false
+  cert_file: ""
+  key_file: ""
+  cors:
+    enabled: false
+    allowed_origins: []
+  basic_auth:
+    enabled: false
+    realm: restricted
+    username: ""
+    password_hash: ""
+    algorithm: sha256
+    salt: ""
+input:
+  aws_s3:
+    bucket: temp-hyperliquid-l1-data
+    prefix: temp-hyperliquid-l1-data/
+    region: ${S3_REGION}
+    credentials:
+      id: ${S3_ACCESS_KEY_ID}
+      secret: ${S3_SECRET_ACCESS_KEY}
+buffer:
+  none: {}
+pipeline:
+  threads: -1
+  processors:
+    - decompress:
+        algorithm: lz4
+    - msgpack:
+        operator: to_json
+    - unarchive:
+        format: json_array
+    - mapping: |
+        root = this
+output:
+  kafka:
+    addresses: ["redpanda:9092"] # No default (required)
+    topic: "json-l1-blocks" # No default (required)
+    key: '${! json().header.height }'
+    max_in_flight: 1
+    retry_as_batch: true
+input_resources: []
+processor_resources: []
+output_resources: []
+cache_resources: []
+rate_limit_resources: []
+logger:
+  level: TRACE
+  format: logfmt
+  add_timestamp: false
+  level_name: level
+  timestamp_name: time
+  message_name: msg
+  static_fields:
+    '@service': redpanda-connect
+  file:
+    path: ""
+    rotate: false
+    rotate_max_age_days: 0
+metrics:
+  prometheus: {}
+  mapping: ""
+tracer:
+  none: {}
+shutdown_delay: 0s
+shutdown_timeout: 20s
+tests: []
+redpanda:
+  seed_brokers: []
+  client_id: benthos
+  tls:
+    enabled: false
+    skip_cert_verify: false
+    enable_renegotiation: false
+    root_cas: ""
+    root_cas_file: ""
+    client_certs: []
+  sasl: []
+  metadata_max_age: 5m
+  pipeline_id: ""
+  logs_topic: ""
+  logs_level: info
+  status_topic: ""
+  idempotent_write: true
+  timeout: 10s
+  max_message_bytes: 1MB
+  broker_write_max_bytes: 100MB

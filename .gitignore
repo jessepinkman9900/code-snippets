@@ -140,8 +140,12 @@ dist
 .infracost
 .DS_Store
 **/.clickhouse-data
+**/.redpanda-data
 
 
 # Added by cargo
 
 /target
+
+**.env.**
+!**.env.example
