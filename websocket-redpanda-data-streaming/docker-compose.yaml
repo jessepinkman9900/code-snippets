@@ -1,4 +1,4 @@
-name: redpanda-cluster
+name: websocket-redpanda-data-streaming
 networks:
   redpanda_network:
     driver: bridge
@@ -44,9 +44,9 @@ services:
       timeout: 3s
       retries: 5
       start_period: 5s
-  console:
+  redpanda-console:
     image: docker.redpanda.com/redpandadata/console:v${REDPANDA_CONSOLE_VERSION:-2.8.1}
-    container_name: console
+    container_name: redpanda-console
     entrypoint: /bin/sh
     command: -c "echo \"$$CONSOLE_CONFIG_FILE\" > /tmp/config.yml; /app/console"
     environment:
@@ -73,10 +73,10 @@ services:
     depends_on:
       - redpanda
   # source connector
-  source-connect:
+  redpanda-source-connect:
     image: docker.redpanda.com/redpandadata/connect
-    hostname: source-connect
-    container_name: source-connect
+    hostname: redpanda-source-connect
+    container_name: redpanda-source-connect
     networks:
       - redpanda_network
     #platform: 'linux/amd64'
@@ -87,10 +87,10 @@ services:
     volumes:
       - ./source-connect.yaml:/connect.yaml
   # sink connector
-  sink-connect:
+  redpanda-sink-connect:
     image: docker.redpanda.com/redpandadata/connect
-    hostname: sink-connect
-    container_name: sink-connect
+    hostname: redpanda-sink-connect
+    container_name: redpanda-sink-connect
     networks:
       - redpanda_network
     depends_on:
@@ -117,9 +117,9 @@ services:
       CLICKHOUSE_DB: "default"
     networks:
       - redpanda_network
-  ch-ui:
+  clickhouse-console:
     image: ghcr.io/caioricciuti/ch-ui:latest
-    container_name: ch-ui
+    container_name: clickhouse-console
     restart: always
     ports:
       - "5521:5521"
