@@ -8,6 +8,8 @@ setup:
   pre-commit install
   # dotenvx
   curl -sfS https://dotenvx.sh/install.sh | sh
+  # goose cli
+  go install github.com/pressly/goose/v3/cmd/goose@v3.24.0
 
 [group('data')]
 load profile='accelerate-lambdas' region='ap-northeast-1':
@@ -41,3 +43,23 @@ submit:
 # pkg & submit
 [group('aws-emr')]
 clean-submit: pkg submit
+
+# terraform init
+[group('terraform')]
+init env='test':
+  cd infra/terraform/workspaces/{{env}} && dotenvx run -f .env -- terraform init
+
+# terraform plan
+[group('terraform')]
+plan env='test':
+  cd infra/terraform/workspaces/{{env}} && dotenvx run -f .env -- terraform plan
+
+# terraform apply
+[group('terraform')]
+apply env='test':
+  cd infra/terraform/workspaces/{{env}} && dotenvx run -f .env -- terraform apply
+
+# terraform destroy
+[group('terraform')]
+destroy env='test':
+  cd infra/terraform/workspaces/{{env}} && dotenvx run -f .env -- terraform destroy

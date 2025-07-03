@@ -1,3 +1,9 @@
 [tools]
-aws = "2.27.40"
 just = "1.40.0"
+# spark job
+aws = "2.27.40"
+# infra
+terraform = "1.10.3"
+# goose
+go = "1.23"
+infracost = "0.10.40"

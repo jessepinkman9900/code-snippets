@@ -28,15 +28,31 @@ graph LR
 ```
 
 ## Run on Local
-
-0. Setup Infra
+0. Setup tools
 ```bash
+just setup
+```
+
+1. Setup Infra
+```bash
+just init
+# setup env
+cp .env.example .env
+# update env var
+just plan
 just apply
 # 1. create clickhouse database & run migrations
 # 2. create aws resources - iam, s3, emr
-```
 
-1. Run job
+## misc infra cost
+infracost auth login
+infracost configure set api_key <your-infracost-api-key>
+cd infra/terraform/workspaces/test && infracost breakdown --path .
+```
+TODO
+- test interactive notebook (workspaces) & outgoing connection to clickhouse
+
+2. Run job
 ```bash
 cp .env.example .env
 # update env var
