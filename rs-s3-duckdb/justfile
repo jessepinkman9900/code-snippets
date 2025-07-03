@@ -5,7 +5,19 @@ default:
 # install dependencies/tools
 setup:
   mise install
+  cargo install flamegraph
+  cargo install --locked samply
 
 [group('app')]
 run:
   dotenvx run -f .env -- cargo run
+
+alias f := flamegraph
+[group('dev')]
+flamegraph:
+  dotenvx run -f .env -- cargo flamegraph
+
+alias s := samply
+[group('dev')]
+samply:
+  dotenvx run -f .env -- samply record ./target/debug/rs-s3-duckdb

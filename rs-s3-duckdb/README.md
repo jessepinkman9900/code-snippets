@@ -12,6 +12,10 @@ graph LR
 - file write - serde json to local disk
 - duckdb in memory
 
+- profiling - flamegraph
+  - needs xctrace (xcode)
+
+
 ## Run on local
 ```bash
 mise install
@@ -20,4 +24,15 @@ mise install
 cp .env.example .env
 # update .env with your s3 credentials
 just run
+```
+
+## Profiling
+```bash
+just flamegraph
+open flamegraph.svg
+```
+
+```bash
+just samply
+# nice ui on browser localhost:3000
 ```
