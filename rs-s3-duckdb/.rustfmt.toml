@@ -1,0 +1,4 @@
+# Use 2 spaces for indentation
+tab_spaces = 2
+# Set maximum line length to 80 characters
+max_width = 80

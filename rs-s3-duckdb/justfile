@@ -1,0 +1,11 @@
+[private]
+default:
+    just --list
+
+# install dependencies/tools
+setup:
+  mise install
+
+[group('app')]
+run:
+  dotenvx run -f .env -- cargo run
