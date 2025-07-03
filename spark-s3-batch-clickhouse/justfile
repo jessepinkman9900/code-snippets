@@ -1,0 +1,43 @@
+[private]
+default:
+    just --list
+
+# install dependencies/tools
+setup:
+  mise install
+  pre-commit install
+  # dotenvx
+  curl -sfS https://dotenvx.sh/install.sh | sh
+
+[group('data')]
+load profile='accelerate-lambdas' region='ap-northeast-1':
+  mkdir -p .data-l1/hl-mainnet-node-data/explorer_blocks/0 && aws s3 sync s3://hl-mainnet-node-data/explorer_blocks/0/ .data-l1/hl-mainnet-node-data/explorer_blocks/0 --request-payer requester --profile {{profile}} --region {{region}}
+  du -sh .data-l1
+
+[group('docker')]
+up env='test': down
+  dotenvx run -f .env.{{env}} -- docker compose up -d
+
+[group('docker')]
+down:
+  docker compose down -v
+  rm -rf .data-clickhouse
+
+[group('jupyter-notebook')]
+run:
+  cd notebook && uv run jupyter lab
+
+# create package for spark job - python venv zip, jars & pyspark script
+[group('aws-emr')]
+pkg:
+  rm -rf target && mkdir -p target && cp *.py target && DOCKER_BUILDKIT=1 docker build -f Dockerfile --output ./target .
+  mkdir -p target/jars && chmod +x download-jars.sh && ./download-jars.sh && mv *.jar target/jars
+
+# copies target folder to s3 & submits job using aws cli
+[group('aws-emr')]
+submit:
+  chmod +x submit-job.sh && dotenvx run -f .env -- ./submit-job.sh
+
+# pkg & submit
+[group('aws-emr')]
+clean-submit: pkg submit

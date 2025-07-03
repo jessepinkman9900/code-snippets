@@ -149,3 +149,10 @@ dist
 
 **.env.**
 !**.env.example
+
+# data
+**/.data**
+
+**/.venv
+**/.ipynb_checkpoints
+**/target
