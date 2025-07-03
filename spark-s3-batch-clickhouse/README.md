@@ -51,6 +51,7 @@ cd infra/terraform/workspaces/test && infracost breakdown --path .
 ```
 TODO
 - test interactive notebook (workspaces) & outgoing connection to clickhouse
+- can i remove NAT gateway?
 
 2. Run job
 ```bash
