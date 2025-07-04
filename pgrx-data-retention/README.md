@@ -6,10 +6,14 @@
 - for each row in the config table it will create a background job to apply the policy for that logical database
 - use GUC to store worker specific config
 
+## Documentation
+- instructions to load it into a postgres server
+
 ### Testing
 - embeded postgres testing for bgworker
 - testing across pg versions
 - jepsen testing?
+- reference - https://github.com/timescale/pgvectorscale/tree/main/pgvectorscale
 
 ### Design choices
 - limitation of BG worker is that it can only connect to the database defined at startup. it cannot switch dynamically
@@ -56,4 +60,15 @@ INSERT INTO data_retention_policy (schema_name, table_name, retention_days, time
 # 13.log since default pg version is 13 in Cargo.toml
 # in new terminal window
 tail -f ${HOME}/.pgrx/13.log
+```
+
+```bash
+# useful commands
+cargo pgrx help
+```
+
+## Docker + Extension
+```bash
+# build  the extension & load into postgres-17
+just up
 ```

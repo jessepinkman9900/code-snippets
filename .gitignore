@@ -139,8 +139,11 @@ dist
 # infracost
 .infracost
 .DS_Store
+
+# docker volume
 **/.clickhouse-data
 **/.redpanda-data
+**/.data_*
 
 
 # Added by cargo

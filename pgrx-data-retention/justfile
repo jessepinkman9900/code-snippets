@@ -31,3 +31,12 @@ alias s := samply
 [group('dev')]
 samply:
   dotenvx run -f .env -- samply record ./target/debug/pgrx_embed_pgrx_replication_kafka
+
+# build postgres image with extension & run
+[group('docker')]
+up:
+  docker-compose up --build
+
+[group('docker')]
+down:
+  docker-compose down -v
