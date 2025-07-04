@@ -22,7 +22,7 @@ Code snippets
   - read file from 3rd party s3, parse it, write to duckdb
 
 ## Spark
-- [spark-s3-batch-clickhouse](spark-s3-batch-clickhouse)
+- [pyspark-s3-batch-clickhouse](pyspark-s3-batch-clickhouse)
   - read file from s3, parse it, write to clickhouse
   - terraform create clickhouse server & emr serverles application
 
