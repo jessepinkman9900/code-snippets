@@ -3,7 +3,7 @@ default:
     just --list
 
 # install dependencies/tools
-setup:
+init:
   mise install
   pre-commit install
   # dotenvx

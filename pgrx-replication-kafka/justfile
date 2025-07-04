@@ -5,19 +5,14 @@ default:
 # install dependencies/tools
 init:
   mise install
-  cargo install flamegraph
   cargo install --locked samply
+  cargo install --locked cargo-pgrx
 
 [group('app')]
 run:
   dotenvx run -f .env -- cargo run
 
-alias f := flamegraph
-[group('dev')]
-flamegraph:
-  dotenvx run -f .env -- cargo flamegraph
-
 alias s := samply
 [group('dev')]
 samply:
-  dotenvx run -f .env -- samply record ./target/debug/rs-s3-duckdb
+  dotenvx run -f .env -- samply record ./target/debug/pgrx-replication-kafka
