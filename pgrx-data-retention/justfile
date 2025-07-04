@@ -1,0 +1,33 @@
+[private]
+default:
+    just --list
+
+# install dependencies/tools
+init:
+  mise install
+  cargo install --locked samply
+  cargo install --locked cargo-pgrx
+  brew install icu4c pkg-config
+  export PKG_CONFIG_PATH=/opt/homebrew/opt/icu4c/lib/pkgconfig
+  cargo pgrx init
+
+# run app
+[group('app')]
+run:
+  cargo pgrx run
+
+# build app
+[group('app')]
+pkg:
+  cargo pgrx package
+
+# test
+[group('app')]
+test:
+  cargo pgrx test
+
+# cpu profiling
+alias s := samply
+[group('dev')]
+samply:
+  dotenvx run -f .env -- samply record ./target/debug/pgrx_embed_pgrx_replication_kafka
