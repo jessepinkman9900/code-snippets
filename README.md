@@ -1,17 +1,9 @@
 # code-snippets
 Code snippets
 
-
-## IaaC
-- [pulumi-python/clickhouse](pulumi-python/clickhouse)
-  - provision clickhouse cluster using pulumi IaaC
-
-- [terraform](terraform)
-  - terraform code snippets
-
-## Telegram Bot
-- [tg-bot](tg-bot)
-  - telegram bot
+## Postgres Extensions
+- [pgrx-data-retention](pgrx-data-retention)
+  - pgrx extension based background worker to delete rows from a table based on a retention policy defined in a config table
 
 ## Postgres Logical Replication
 - [sequin-postgres-cdc](sequin-postgres-cdc)
@@ -39,3 +31,14 @@ Code snippets
   - writing a grammar & generating parser for that grammar
 - [drools-rule-engine](drools-rule-engine)
   - implement API request validation using drools rule engine in spring boot
+
+## IaaC
+- [pulumi-python/clickhouse](pulumi-python/clickhouse)
+  - provision clickhouse cluster using pulumi IaaC
+
+- [terraform](terraform)
+  - terraform code snippets
+
+## Telegram Bot
+- [tg-bot](tg-bot)
+  - telegram bot

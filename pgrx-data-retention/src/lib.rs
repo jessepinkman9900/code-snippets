@@ -1,6 +1,5 @@
 use pgrx::bgworkers::*;
 use pgrx::prelude::*;
-use pgrx::*;
 use std::time::Duration;
 
 /*

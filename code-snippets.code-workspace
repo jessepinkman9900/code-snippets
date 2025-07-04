@@ -61,8 +61,11 @@
     // {
     //   "path": "antlr4-parser"
     // },
+    // {
+    //   "path": "s3-redpanda-data-streaming"
+    // },
     {
-      "path": "s3-redpanda-data-streaming"
+      "path": "spark-s3-streaming-clickhouse"
     }
   ],
 }
