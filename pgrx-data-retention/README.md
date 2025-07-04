@@ -25,6 +25,11 @@
 - Background workers must be initialised in the extension's `_PG_init()` function, and can **only**
     be started if loaded through the `shared_preload_libraries` configuration setting
 
+### V2
+- single static background worker - orchestrator
+- this orchestrator will read the config table & spawn a dynamic bg worker for each row in the data retention config table
+
+
 ## Current Implementation
 - on startup it will drop `public.data_retention_policy` table if exists and create it again in `postgres` database
 - it will run a cron job every 10 seconds to check if there are any rows in `public.data_retention_policy` table
