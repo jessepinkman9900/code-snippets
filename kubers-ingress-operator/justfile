@@ -19,12 +19,14 @@ alias kd := cluster-down
 cluster-down:
   k3d cluster delete local-k8s
 
+alias run := operator-run
 # run operator
 [group('operator')]
-run:
+operator-run:
   cd operator && cargo run
 
+alias build := contracts-build
 # run contracts
 [group('contracts')]
-build:
+contracts-build:
   cd contracts && forge build
