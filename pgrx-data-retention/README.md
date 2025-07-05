@@ -7,6 +7,18 @@
   - if the table exists, it will delete rows from the table based on the retention policy
   - if the table exists & sql statement fails the bg worker will panic and exit. its not a catchable error
 
+### Config Table
+
+| column_name            | data_type | description |
+|------------------------|-----------|-------------|
+| database_name          | TEXT      | logical database name |
+| schema_name            | TEXT      | schema name   |
+| table_name             | TEXT      | table name    |
+| retention_days         | INT       | retention period in days|
+| timestamp_column_name  | TEXT      | column with type timestamp in your table that can be used to determine the age of the row |
+| batch_size             | INT       | rows to delete in each iteration of the bg worker |
+| cron_schedule          | TEXT      | to limit number of executions per day (not yet implemented) |
+
 ### Design choices
 - 1 static background worker - as long as the service is running it will keep running & try to apply the policy
   - sleep for 10s between each iteration
