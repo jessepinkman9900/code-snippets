@@ -43,6 +43,9 @@
 - growth in count of dynamically spawned bg workers
 - runtime of dynamically spawned bg workers
 
+### Packaging
+- ci/cd - https://github.com/timescale/pgvectorscale/blob/main/.github/workflows/deb-packager.yaml
+
 ## Run on local
 
 ```bash
