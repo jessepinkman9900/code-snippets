@@ -12,6 +12,11 @@ up:
 up-build:
   cd docker && chmod +x setup-keys.sh && ./setup-keys.sh && docker compose up -d --build
 
+# stop docker compose
+[group('docker')]
+down:
+  cd docker && docker compose down
+
 [group('dev')]
 fmt:
   lein cljfmt check && lein cljfmt fix
