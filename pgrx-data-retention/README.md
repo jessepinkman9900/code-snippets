@@ -22,6 +22,7 @@
 ### Design choices
 - 1 static background worker - as long as the service is running it will keep running & try to apply the policy
   - sleep for 10s between each iteration
+  - servers needs to be restarted once this extension is loaded as a shared preload library
 - policy applied by dynamic bg worker swapned by the orchestrator bg worker
 - sequential execution of policies. block on previous policy bg worker to complete before starting the next policy
   - predictable execution order & resource utilization
@@ -35,7 +36,7 @@
 ### Testing
 - embeded postgres testing for bgworker
 - testing across pg versions
-- jepsen testing?
+- regression testing
 - reference - https://github.com/timescale/pgvectorscale/tree/main/pgvectorscale
 
 ### Instrumentation/Profiling
