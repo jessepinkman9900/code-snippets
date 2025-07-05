@@ -1,4 +1,19 @@
 # Data Retention Background Worker
+
+- on startup it will drop `public.data_retention_policy` table if exists and create it again in `postgres` database
+- orchestration bg worker will sleep for 10 seconds after each policy execution
+- if there are rows in `public.data_retention_policy` table, it will spawn a bg worker to delete rows from the specified table based on the retention policy
+  - if the table does not exist, it will skip the policy
+  - if the table exists, it will delete rows from the table based on the retention policy
+  - if the table exists & sql statement fails the bg worker will panic and exit. its not a catchable error
+
+### Design choices
+- 1 static background worker - as long as the service is running it will keep running & try to apply the policy
+  - sleep for 10s between each iteration
+- policy applied by dynamic bg worker swapned by the orchestrator bg worker
+- sequential execution of policies. block on previous policy bg worker to complete before starting the next policy
+  - predictable execution order & resource utilization
+
 ## TODO
 ### Feature
 - use GUC to store worker specific config
@@ -12,21 +27,6 @@
 ### Instrumentation/Profiling
 - growth in count of dynamically spawned bg workers
 - runtime of dynamically spawned bg workers
-
-### Design choices
-- 1 static background worker - as long as the service is running it will keep running & try to apply the policy
-  - sleep for 10s between each iteration
-- policy applied by dynamic bg worker swapned by the orchestrator bg worker
-- sequential execution of policies. block on previous policy bg worker to complete before starting the next policy
-  - predictable execution order & resource utilization
-
-## Current Implementation
-- on startup it will drop `public.data_retention_policy` table if exists and create it again in `postgres` database
-- it will run a cron job every 10 seconds to check if there are any rows in `public.data_retention_policy` table
-- if there are rows in `public.data_retention_policy` table, it will run a background job to delete rows from the specified table based on the retention policy
-  - if the table does not exist, it will skip the policy
-  - if the table exists, it will delete rows from the table based on the retention policy
-  - if the table exists & sql statement fails the bg worker will panic and exit. its not a catchable error
 
 ## Run on local
 
