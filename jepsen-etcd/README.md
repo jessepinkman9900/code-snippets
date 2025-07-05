@@ -1,6 +1,9 @@
 # jepsen-etcd
 
-A Clojure library designed to ... well, that part is up to you.
+Jepsen etcd test
+
+## Todo
+- continue from here - https://github.com/jepsen-io/jepsen/blob/main/doc/tutorial/03-client.md
 
 ## Run on local
 
