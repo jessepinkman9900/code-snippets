@@ -25,6 +25,7 @@
 - policy applied by dynamic bg worker swapned by the orchestrator bg worker
 - sequential execution of policies. block on previous policy bg worker to complete before starting the next policy
   - predictable execution order & resource utilization
+  - if resource utilization still, you can always just lower batch size
 
 ## TODO
 ### Feature
