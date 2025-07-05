@@ -15,6 +15,11 @@ Code snippets
 - [postgres-stream-using-logical-replication](postgres-stream-using-logical-replication)
   - use debezium engine + spring boot to consume postgres logical replication changes & publish to kafka
 
+## Kube Operators
+- [kubers-ingress-operator](kubers-ingress-operator)
+  - pay to call api 
+    - solidity smart contract for payments + k8s operator & custom ingress auth middleware to allow access upon payment using digital signature as api key
+
 ## Redpanda Connect
 - [redpanda-connect-websocket-source-clickhouse-sink](redpanda-connect-websocket-source-clickhouse-sink)
   - use redpanda connect to scrape websocket & publish to redpanda topic & sink to clickhouse db
