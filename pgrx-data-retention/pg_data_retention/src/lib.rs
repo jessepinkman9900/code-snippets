@@ -23,22 +23,6 @@ pub extern "C-unwind" fn _PG_init() {
   retention::orchestrator::init();
 }
 
-#[pg_extern]
-fn hello_extention() -> &'static str {
-  "Hello, extention"
-}
-
-#[cfg(any(test, feature = "pg_test"))]
-#[pg_schema]
-mod tests {
-  use pgrx::prelude::*;
-
-  #[pg_test]
-  fn test_hello_extention() {
-    assert_eq!("Hello, extention", crate::hello_extention());
-  }
-}
-
 /// This module is required by `cargo pgrx test` invocations.
 /// It must be visible at the root of your extension crate.
 #[cfg(test)]
@@ -50,6 +34,6 @@ pub mod pg_test {
   #[must_use]
   pub fn postgresql_conf_options() -> Vec<&'static str> {
     // return any postgresql.conf settings that are required for your tests
-    vec!["shared_preload_libraries = 'pgrx_data_retention'"]
+    vec!["shared_preload_libraries = 'pg_data_retention'"]
   }
 }

@@ -15,7 +15,7 @@ fn _init_guc() {}
 fn _init_bgworker() {
   BackgroundWorkerBuilder::new("Data Retention Orchestrator Worker")
     .set_function("_data_retention_orchestrator_bgworker_main")
-    .set_library("pgrx_data_retention")
+    .set_library("pg_data_retention")
     .enable_spi_access()
     .load();
   log!("Data Retention Orchestrator bg worker initialized");

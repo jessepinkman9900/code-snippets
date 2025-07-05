@@ -51,7 +51,7 @@ just init
 # $PGVER is the default version defined in Cargo.toml
 # so that you run the extention with pgrx
 # default pg version is 13 in Cargo.toml so update file in ${HOME}/.pgrx/data-13/postgresql.conf
-shared_preload_libraries = 'pgrx_data_retention.so'
+shared_preload_libraries = 'pg_data_retention.so'
 
 # run the extention
 just run

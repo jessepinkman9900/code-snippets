@@ -1,6 +1,6 @@
 comment = 'extention:  Created by pgrx'
 default_version = '@CARGO_VERSION@'
-module_pathname = 'pgrx_data_retention'
+module_pathname = 'pg_data_retention'
 relocatable = false
 superuser = true
 trusted = false

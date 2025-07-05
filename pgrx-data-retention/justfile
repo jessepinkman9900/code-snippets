@@ -14,29 +14,29 @@ init:
 # run app
 [group('app')]
 run:
-  cargo pgrx run
+  cd pg_data_retention && cargo pgrx run
 
 # build app
 [group('app')]
 pkg:
-  cargo pgrx package
+  cd pg_data_retention && cargo pgrx package
 
 # test
 [group('app')]
 test:
-  cargo pgrx test
+  cd pg_data_retention && cargo pgrx test
 
 # cpu profiling
 alias s := samply
 [group('dev')]
 samply:
-  dotenvx run -f .env -- samply record ./target/debug/pgrx_embed_pgrx_replication_kafka
+  dotenvx run -f .env -- samply record ./pg_data_retention/target/debug/pgrx_embed_pg_data_retention
 
 # build postgres image with extension & run
 [group('docker')]
 up:
-  docker-compose up --build
+  cd docker && docker-compose up -d --build
 
 [group('docker')]
 down:
-  docker-compose down -v
+  cd docker && docker-compose down -v

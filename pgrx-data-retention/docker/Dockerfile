@@ -21,19 +21,19 @@ ENV PATH="/root/.cargo/bin:$PATH"
 RUN cargo install --locked cargo-pgrx@0.15.0 \
  && cargo pgrx init --pg17=$(which pg_config)
 
-COPY . /pgrx_data_retention
+COPY pg_data_retention /pg_data_retention
 
-RUN cd /pgrx_data_retention \
+RUN cd /pg_data_retention \
  && PG_VERSION=pg17 \
  && cargo pgrx package
 
 
 FROM base
 
-COPY --from=build /pgrx_data_retention/target/release/pgrx_data_retention-pg17/ /
+COPY --from=build /pg_data_retention/target/release/pg_data_retention-pg17/ /
 
 RUN cat >> /usr/share/postgresql/postgresql.conf.sample <<EOF
-shared_preload_libraries = 'pgrx_data_retention'
+shared_preload_libraries = 'pg_data_retention'
 wal_level = logical
 EOF
 

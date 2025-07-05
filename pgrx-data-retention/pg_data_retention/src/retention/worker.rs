@@ -17,7 +17,7 @@ pub fn spawn_data_retention_worker(
   // We'll look up the policy from the database using this ID
   BackgroundWorkerBuilder::new(worker_name.as_str())
     .set_function("_data_retention_bgworker_main")
-    .set_library("pgrx_data_retention")
+    .set_library("pg_data_retention")
     .set_argument(policy.id.into_datum())
     .set_extra(policy.to_csv().as_str())
     .set_notify_pid(unsafe { pg_sys::MyProcPid })

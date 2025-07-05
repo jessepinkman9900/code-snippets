@@ -1,5 +1,5 @@
 [package]
-name = "pgrx_data_retention"
+name = "pg_data_retention"
 version = "0.0.0"
 edition = "2021"
 
@@ -7,7 +7,7 @@ edition = "2021"
 crate-type = ["cdylib", "lib"]
 
 [[bin]]
-name = "pgrx_embed_pgrx_data_retention"
+name = "pgrx_embed_pg_data_retention"
 path = "./src/bin/pgrx_embed.rs"
 
 [features]

@@ -1,6 +1,6 @@
 .DS_Store
 .idea/
-/target
+pg_data_retention/target
 *.iml
 **/*.rs.bk
 Cargo.lock
