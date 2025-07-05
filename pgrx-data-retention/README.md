@@ -1,13 +1,7 @@
 # Data Retention Background Worker
 ## TODO
 ### Feature
-- create a config table that `_PG_init()` will read on `pgctl restart`
-  - config table (id, database_name, user_name)
-- for each row in the config table it will create a background job to apply the policy for that logical database
 - use GUC to store worker specific config
-
-## Documentation
-- instructions to load it into a postgres server
 
 ### Testing
 - embeded postgres testing for bgworker
@@ -15,20 +9,16 @@
 - jepsen testing?
 - reference - https://github.com/timescale/pgvectorscale/tree/main/pgvectorscale
 
+### Instrumentation/Profiling
+- growth in count of dynamically spawned bg workers
+- runtime of dynamically spawned bg workers
+
 ### Design choices
-- limitation of BG worker is that it can only connect to the database defined at startup. it cannot switch dynamically
-- therefore we need to create a bg worker for each database for which we want to apply the policy
-- bg worker cannot be spawned by using a SQL statement since SQL statement run in user process & not in the background worker process
-  - change in config needs postgres server restart for the `_PG_init()` to pick up the new config & create new bg workers
-    - can we use some signal to notify the bg worker to reload the config?
-
-- Background workers must be initialised in the extension's `_PG_init()` function, and can **only**
-    be started if loaded through the `shared_preload_libraries` configuration setting
-
-### V2
-- single static background worker - orchestrator
-- this orchestrator will read the config table & spawn a dynamic bg worker for each row in the data retention config table
-
+- 1 static background worker - as long as the service is running it will keep running & try to apply the policy
+  - sleep for 10s between each iteration
+- policy applied by dynamic bg worker swapned by the orchestrator bg worker
+- sequential execution of policies. block on previous policy bg worker to complete before starting the next policy
+  - predictable execution order & resource utilization
 
 ## Current Implementation
 - on startup it will drop `public.data_retention_policy` table if exists and create it again in `postgres` database
@@ -37,7 +27,6 @@
   - if the table does not exist, it will skip the policy
   - if the table exists, it will delete rows from the table based on the retention policy
   - if the table exists & sql statement fails the bg worker will panic and exit. its not a catchable error
-
 
 ## Run on local
 
@@ -57,9 +46,15 @@ just run
 # insert some data into the data_retention_policy table
 # in the psql cli that shows up when you run `just run`
 \c postgres;
-INSERT INTO data_retention_policy (schema_name, table_name, retention_days, timestamp_column_name, batch_size, cron_schedule) VALUES ('public', 'user_logs', 30, 'created_at', 1000, '0 0 * * *');
 
-INSERT INTO data_retention_policy (schema_name, table_name, retention_days, timestamp_column_name, batch_size, cron_schedule) VALUES ('public', 'events', 90, 'created_at', 500, '0 0 * * *');
+INSERT INTO public.data_retention_policy (database_name, schema_name, table_name, retention_days, timestamp_column_name, batch_size, cron_schedule)
+VALUES ('postgres', 'public', 'products', 30, 'inserted_at', 1000, '0 0 * * *');
+
+INSERT INTO public.data_retention_policy (database_name, schema_name, table_name, retention_days, timestamp_column_name, batch_size, cron_schedule)
+VALUES ('db1', 'public', 'products', 30, 'inserted_at', 1000, '0 0 * * *');
+
+INSERT INTO public.data_retention_policy (database_name, schema_name, table_name, retention_days, timestamp_column_name, batch_size, cron_schedule)
+VALUES ('db2', 'public', 'products', 30, 'inserted_at', 1000, '0 0 * * *');
 
 # check server logs to see bg worker is running
 # 13.log since default pg version is 13 in Cargo.toml
