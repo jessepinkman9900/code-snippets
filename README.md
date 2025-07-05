@@ -1,6 +1,10 @@
 # code-snippets
 Code snippets
 
+## Blackbox Testing
+- [jepsen-etcd](jepsen-etcd)
+  - jepsen etcd test using docker compose
+
 ## Postgres Extensions
 - [pgrx-data-retention](pgrx-data-retention)
   - pgrx extension based background worker to delete rows from a table based on a retention policy defined in a config table
