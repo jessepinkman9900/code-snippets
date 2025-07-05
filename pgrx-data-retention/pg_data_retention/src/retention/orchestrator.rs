@@ -13,7 +13,7 @@ pub fn init() {
 fn _init_guc() {}
 
 fn _init_bgworker() {
-  BackgroundWorkerBuilder::new("Data Retention Orchestrator Worker")
+  BackgroundWorkerBuilder::new("Data Retention Orchestrator")
     .set_function("_data_retention_orchestrator_bgworker_main")
     .set_library("pg_data_retention")
     .enable_spi_access()
@@ -26,8 +26,6 @@ fn _init_bgworker() {
 pub extern "C-unwind" fn _data_retention_orchestrator_bgworker_main(
   arg: pg_sys::Datum,
 ) {
-  let arg = unsafe { i32::from_polymorphic_datum(arg, false, pg_sys::INT4OID) };
-
   // these are signals we want to receive
   // if not attached, then cannot exit via external notification
   BackgroundWorker::attach_signal_handlers(
@@ -38,11 +36,7 @@ pub extern "C-unwind" fn _data_retention_orchestrator_bgworker_main(
   // can set second argument to Some("username") if you want to use a different user
   BackgroundWorker::connect_worker_to_spi(Some("postgres"), None);
 
-  log!(
-    "Hello from inside the {} BGWorker!  Argument value={}",
-    BackgroundWorker::get_name(),
-    arg.unwrap()
-  );
+  log!("Hello from inside the Data Retention Orchestrator BGWorker!");
 
   // create table if not exists
   let result: Result<(), pgrx::spi::Error> =
@@ -65,11 +59,12 @@ pub extern "C-unwind" fn _data_retention_orchestrator_bgworker_main(
     let result: Result<(), pgrx::spi::Error> =
       BackgroundWorker::transaction(|| {
         Spi::connect_mut(|client| {
-          select_ping(client);
+          // use for testing orchestrator bg worker
+          // select_ping(client);
+
           // Try to apply data retention policy but don't crash if it fails
           if let Err(e) = apply_data_retention_policy(client) {
             log!("Error applying data retention policies: {}", e);
-            // Continue execution even if policy application fails
           }
           Ok(())
         })
@@ -79,10 +74,7 @@ pub extern "C-unwind" fn _data_retention_orchestrator_bgworker_main(
     });
   }
 
-  log!(
-    "Goodbye from inside the {} BGWorker!",
-    BackgroundWorker::get_name()
-  );
+  log!("Goodbye from inside the Data Retention Orchestrator BGWorker!");
 }
 
 /// Drop and recreate the data retention policy configuration table
@@ -140,6 +132,8 @@ fn apply_data_retention_policy(
       return Ok(());
     }
   };
+
+  log!("{} policies found", policies.len());
 
   for policy in policies {
     let worker = spawn_data_retention_worker(&policy).unwrap();

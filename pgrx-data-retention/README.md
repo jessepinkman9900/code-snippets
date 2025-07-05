@@ -30,6 +30,7 @@
 ## TODO
 ### Feature
 - use GUC to store worker specific config
+- allow user to trigger 1 execution of the bg worker for a table (schema_name, table_name, timestamp_column_name, batch_size)
 
 ### Testing
 - embeded postgres testing for bgworker
