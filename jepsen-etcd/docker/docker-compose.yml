@@ -1,0 +1,55 @@
+
+services:
+  control:
+    container_name: control
+    hostname: control
+    build:
+      context: ..
+      dockerfile: ./docker/control/Dockerfile
+    env_file: ./secret/control.env
+    ports:
+      - 22
+      - 8080:8080
+    networks:
+      - jepsen
+    volumes:
+      - ../:/jepsen
+      - jepsen-shared:/var/jepsen/shared
+  
+  n1:
+    container_name: jepsen-node1
+    hostname: n1
+    build:
+      context: ..
+      dockerfile: ./docker/node/Dockerfile
+    env_file: ./secret/node.env
+    secrets:
+      - authorized_keys
+    tty: true
+    cgroup: host
+    networks:
+      - jepsen
+    cap_add:
+      - ALL
+    ports:
+      - 22
+    volumes:
+      - ../:/jepsen
+      - jepsen-shared:/var/jepsen/shared
+    command: ["/bin/bash", "-c", "/usr/local/preinit/setup-jepsen && exec /usr/sbin/sshd -D"]
+    healthcheck:
+      test: [ 'CMD-SHELL', 'systemctl status sshd | grep "Active: active (running)"' ]
+      interval: 1s
+      timeout: 1s
+      retries: 3
+      start_period: 3s
+
+volumes:
+  jepsen-shared:
+
+secrets:
+  authorized_keys:
+    file: ./secret/authorized_keys
+
+networks:
+  jepsen:

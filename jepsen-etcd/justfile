@@ -1,0 +1,13 @@
+[private]
+default:
+    just --list
+
+# setup keys and start docker compose
+[group('docker')]
+up:
+  cd docker && docker compose up -d
+
+# setup keys and start docker compose with build
+[group('docker')]
+up-build:
+  cd docker && chmod +x setup-keys.sh && ./setup-keys.sh && docker compose up -d --build
