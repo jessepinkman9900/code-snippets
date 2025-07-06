@@ -15,6 +15,11 @@ Code snippets
 - [postgres-stream-using-logical-replication](postgres-stream-using-logical-replication)
   - use debezium engine + spring boot to consume postgres logical replication changes & publish to kafka
 
+## PGLite
+- [pgwire-pglite](pgwire-pglite)
+  - pglite + pglite-socket to be able to use psql with pglite
+  - can use for running in memory postgres for testing in k8s env without access to local file system where traditional postgres cannot run
+
 ## Kube Operators
 - [kubers-ingress-operator](kubers-ingress-operator)
   - pay to call api 

@@ -1,0 +1,28 @@
+[private]
+default:
+  just --list
+
+# run pg server
+[group('server')]
+server:
+  bun run index.ts
+
+[group('server')]
+cli-server:
+  bun run pglite-server
+
+# connect psql to pg server
+[group('client')]
+client:
+  PGSSLMODE=disable psql -h localhost -p 5432 -U postgres -d postgres
+
+# docker compose up
+[group('docker')]
+up:
+  cd docker && docker compose up -d --build
+
+# docker compose down
+[group('docker')]
+down:
+  cd docker && docker compose down
+ 
