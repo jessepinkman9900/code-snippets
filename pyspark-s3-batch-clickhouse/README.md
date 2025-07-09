@@ -27,7 +27,7 @@ graph LR
   Spark --> ClickHouse
 ```
 
-## Run on Local
+## Run on AWS EMR Serverless
 0. Setup tools
 ```bash
 just setup
@@ -59,3 +59,6 @@ cp .env.example .env
 # update env var
 just clean-submit
 ```
+
+### Notes
+- logs - historical ui -> exeutors -> sterr or stdout

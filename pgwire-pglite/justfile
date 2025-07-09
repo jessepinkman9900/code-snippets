@@ -2,6 +2,11 @@
 default:
   just --list
 
+# install dependencies/tools
+init:
+  mise install
+  bun install
+
 # run pg server
 [group('server')]
 server:

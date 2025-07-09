@@ -7,3 +7,5 @@ terraform = "1.10.3"
 # goose
 go = "1.23"
 infracost = "0.10.40"
+"aqua:dotenvx/dotenvx" = "1.45.2"
+"aqua:pressly/goose" = "3.24.0"

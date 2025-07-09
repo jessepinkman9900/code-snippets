@@ -13,7 +13,8 @@ JARS=(
     "com/clickhouse/clickhouse-client/0.8.0/clickhouse-client-0.8.0.jar"
     "com/clickhouse/clickhouse-data/0.8.0/clickhouse-data-0.8.0.jar"
     "com/clickhouse/clickhouse-http-client/0.8.0/clickhouse-http-client-0.8.0.jar"
-    "org/apache/httpcomponents/client5/httpclient5/5.2.1/httpclient5-5.2.1.jar"
+    "org/apache/httpcomponents/client5/httpclient5/5.4.1/httpclient5-5.4.1.jar"
+    "org/apache/httpcomponents/core5/httpcore5/5.4.1/httpcore5-5.4.1.jar"
 )
 # --- Script Start ---
 

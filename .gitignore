@@ -159,3 +159,6 @@ dist
 **/.venv
 **/.ipynb_checkpoints
 **/target
+
+# incomplete
+wasm-terminal-aqua
