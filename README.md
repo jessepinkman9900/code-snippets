@@ -9,11 +9,15 @@ Code snippets
 - [pgrx-data-retention](pgrx-data-retention)
   - pgrx extension based background worker to delete rows from a table based on a retention policy defined in a config table
 
-## Postgres Logical Replication
+## Postgres Data Movement
+### Logical Replication
 - [sequin-postgres-cdc](sequin-postgres-cdc)
   - use sequin to consume postgres logical replication changes & publish to kafka
 - [postgres-stream-using-logical-replication](postgres-stream-using-logical-replication)
   - use debezium engine + spring boot to consume postgres logical replication changes & publish to kafka
+### COPY 
+- [postgres-stream-using-watermark-table](postgres-stream-using-watermark-table)
+  - use `COPY (..) TO STDOUT` to stream data from postgres to kafka
 
 ## PGLite
 - [pgwire-pglite](pgwire-pglite)

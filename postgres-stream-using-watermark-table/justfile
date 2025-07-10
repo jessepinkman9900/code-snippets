@@ -1,0 +1,28 @@
+[private]
+default:
+  just --list
+
+[group('dev')]
+init:
+  cargo install diesel_cli --no-default-features --features postgres
+  cargo install --locked samply
+
+[group('docker')]
+down:
+  cd docker && docker compose down
+
+[group('docker')]
+up:
+  cd docker && docker compose up -d
+
+alias r := run 
+# run the application
+[group('dev')]
+run:
+  cargo run
+
+
+alias s := samply
+[group('dev')]
+samply:
+  samply record ./target/debug/postgres-stream-using-watermark-table
