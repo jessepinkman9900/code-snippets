@@ -1,0 +1,10 @@
+apiVersion: fleet.cattle.io/v1alpha1
+kind: GitRepo
+metadata:
+  name: istio-control-plane
+  namespace: fleet-system
+spec:
+  repo: https://github.com/jessepinkman/code-snippets.git
+  branch: fleet # todo: main
+  paths:
+    - k8s-rancher/bootstrap/istio/istiod

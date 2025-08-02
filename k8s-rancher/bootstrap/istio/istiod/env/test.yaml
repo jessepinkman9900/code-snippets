@@ -1,0 +1,15 @@
+global:
+  meshID: mesh-1
+  multiCluster:
+    clusterName: test-cluster
+  network: test-network
+
+pilot:
+  traceSampling: 1.0
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi

@@ -1,0 +1,15 @@
+defaultNamespace: istio-system
+
+helm:
+  repo: https://istio-release.storage.googleapis.com/charts
+  chart: istiod
+  version: 1.26.3
+
+targetCustomizations:
+  - name: test
+    clusterSelector:
+      labels:
+        env: test
+    helm:
+      valuesFiles:
+        - env/test.yaml

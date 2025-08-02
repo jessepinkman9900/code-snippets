@@ -89,15 +89,23 @@ graph TD
     public-subnet-me-south-1c <---> me-south-1-internet-gateway
 ```
 
-AWS IAM Policies
-- AmazonEKSComputePolicy
-- AmazonVPCFullAccess
-- AmazonEC2FullAccess
-- IAMFullAccess
-- AWSCloudFormationFullAccess
-- custom policy - * on eks
+## Folder Structure
+```
+.
+├── fleet       # post provisioning k8s cluster setup
+├── terraform   # provisioning k8s cluster
+└── README.md
+```
 
 ## Rancher + Multi Region EKS Deployment
+- AWS IAM Policies
+  - AmazonEKSComputePolicy
+  - AmazonVPCFullAccess
+  - AmazonEC2FullAccess
+  - IAMFullAccess
+  - AWSCloudFormationFullAccess
+  - custom policy - * on eks
+
 ```sh
 # root dir - k8s-rancher
 cd terraform
