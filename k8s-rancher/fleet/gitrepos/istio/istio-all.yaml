@@ -7,9 +7,9 @@ spec:
   repo: https://github.com/jessepinkman9900/code-snippets.git
   branch: fleet # todo: main
   paths:
-    - k8s-rancher/bootstrap/istio/base
-    - k8s-rancher/bootstrap/istio/istiod
-    - k8s-rancher/bootstrap/istio/gateway
+    - k8s-rancher/fleet/bundles/istio/base
+    - k8s-rancher/fleet/bundles/istio/istiod
+    - k8s-rancher/fleet/bundles/istio/gateway
   targets:
     - name: test
       clusterSelector:
