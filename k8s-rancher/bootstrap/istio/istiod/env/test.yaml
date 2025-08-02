@@ -6,6 +6,8 @@ global:
 
 pilot:
   traceSampling: 1.0
+  autoscaleEnabled: false
+  replicas: 1
   resources:
     requests:
       cpu: 50m

@@ -5,8 +5,8 @@ helm:
   chart: istiod
   version: 1.26.3
 
-# dependsOn:
-#   - name: istio-base-k8s-rancher-bootstrap-istio-base
+dependsOn:
+  - name: istio-base
 
 targetCustomizations:
   - name: test

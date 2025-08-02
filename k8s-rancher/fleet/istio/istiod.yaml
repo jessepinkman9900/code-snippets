@@ -8,4 +8,9 @@ spec:
   branch: fleet # todo: main
   paths:
     - k8s-rancher/bootstrap/istio/istiod
+  targets:
+    - name: test
+      clusterSelector:
+        matchLabels:
+          environment: test
 
