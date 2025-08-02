@@ -1,4 +1,4 @@
-default_aws_region = "me-central-1"
+default_aws_region = "sa-east-1"
 
 common_tags = {
   environment = "test"
@@ -11,9 +11,9 @@ clusters = [
     kubernetes_version = "1.33"
     aws_region         = "me-central-1"
     public_subnet_ids = [
-      "subnet-0e07477623a3dfea8",
-      "subnet-0554f1ec05641abe4",
-      "subnet-0ae426dad47807194",
+      "subnet-06d889b4a8b36572e",
+      "subnet-0ab125a1e2fd525c0",
+      "subnet-00718d95d9526d8cd"
     ]
     node_groups = [
       {
@@ -28,15 +28,19 @@ clusters = [
       update = "30m"
       delete = "30m"
     }
+    tags = {
+      environment = "test"
+      app_prefix  = "rancher"
+    }
   },
   {
     cluster_id         = "001"
     kubernetes_version = "1.33"
     aws_region         = "me-south-1"
     public_subnet_ids = [
-      "subnet-021af243e2ca71251",
-      "subnet-03137d2e4a83e18b2",
-      "subnet-03aeaed9232815b74",
+      "subnet-0fe72e00a06a5f77a",
+      "subnet-00816acc61cf9572d",
+      "subnet-0231b9456f8623454"
     ]
     node_groups = [
       {
@@ -50,6 +54,10 @@ clusters = [
       create = "30m"
       update = "30m"
       delete = "30m"
+    }
+    tags = {
+      environment = "test"
+      app_prefix  = "rancher"
     }
   }
 ]

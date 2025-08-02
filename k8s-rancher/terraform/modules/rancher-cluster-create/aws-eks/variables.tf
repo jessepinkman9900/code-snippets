@@ -42,5 +42,6 @@ variable "cluster" {
       update = string
       delete = string
     })
+    tags = map(string)
   })
 }

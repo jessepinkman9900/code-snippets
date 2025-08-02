@@ -27,6 +27,7 @@ resource "rancher2_cluster" "eks" {
     }
     private_access = true
     public_access = true
+    tags = var.cluster.tags
   }
   timeouts {
     create = var.cluster.timeouts.create
