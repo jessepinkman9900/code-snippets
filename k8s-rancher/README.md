@@ -80,6 +80,13 @@ graph TD
     me-south-1b-nat-gateway ---> me-south-1-internet-gateway
     me-south-1c-nat-gateway ---> me-south-1-internet-gateway
 
+    %% public subnet to internet gateway  bidirectional %%
+    public-subnet-me-central-1a <---> me-central-1-internet-gateway
+    public-subnet-me-central-1b <---> me-central-1-internet-gateway
+    public-subnet-me-central-1c <---> me-central-1-internet-gateway
+    public-subnet-me-south-1a <---> me-south-1-internet-gateway
+    public-subnet-me-south-1b <---> me-south-1-internet-gateway
+    public-subnet-me-south-1c <---> me-south-1-internet-gateway
 ```
 
 AWS IAM Policies
