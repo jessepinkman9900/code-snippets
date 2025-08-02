@@ -35,6 +35,8 @@ clusters = [
     labels = {
       environment = "test"
       "provider.cattle.io" = "eks"
+      region = "me-central-1"
+      cluster_id = "001"
     }
   },
   {
@@ -66,6 +68,8 @@ clusters = [
     labels = {
       environment = "test"
       "provider.cattle.io" = "eks"
+      region = "me-south-1"
+      cluster_id = "001"
     }
   }
 ]
