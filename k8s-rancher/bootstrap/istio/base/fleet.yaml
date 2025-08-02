@@ -4,8 +4,8 @@ helm:
   chart: base
   version: 1.26.3
 
-# targetCustomizations:
-#   - name: test
-#     clusterSelector:
-#       labels:
-#         environment: test
+targetCustomizations:
+  - name: test
+    clusterSelector:
+      matchLabels:
+        environment: test
