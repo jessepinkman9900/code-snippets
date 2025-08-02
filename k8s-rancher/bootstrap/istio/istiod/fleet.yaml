@@ -1,5 +1,5 @@
 defaultNamespace: istio-system
-
+name: istio-istiod
 helm:
   repo: https://istio-release.storage.googleapis.com/charts
   chart: istiod

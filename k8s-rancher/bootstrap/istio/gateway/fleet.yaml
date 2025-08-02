@@ -1,5 +1,5 @@
 defaultNamespace: istio-system
-
+name: istio-gateway
 helm:
   repo: https://istio-release.storage.googleapis.com/charts
   chart: gateway
