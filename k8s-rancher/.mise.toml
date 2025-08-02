@@ -1,0 +1,14 @@
+[tools]
+just = "1.41.0"
+# rust = "1.88.0"
+# kube 
+k3d = "5.8.3"
+k9s = "0.50.6"
+helm = "3.18.3"
+kubectl = "1.33.2"
+# go
+go = "1.24.4"
+# infra
+terraform = "1.12.2"
+# env var
+"aqua:dotenvx/dotenvx" = "1.45.2"

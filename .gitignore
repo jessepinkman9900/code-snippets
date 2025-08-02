@@ -162,3 +162,14 @@ dist
 
 # incomplete
 wasm-terminal-aqua
+
+# tf keys
+id_rsa*
+
+# tf output files
+.output
+
+# scratch
+.scratch
+secret.tfvars
+
