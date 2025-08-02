@@ -8,11 +8,11 @@ helm:
 dependsOn:
   - name: code-snippets-k8s-rancher-bootstrap-istio-base
 
-targetCustomizations:
-  - name: test
-    clusterSelector:
-      labels:
-        env: test
-    helm:
-      valuesFiles:
-        - env/test.yaml
+# targetCustomizations:
+#   - name: test
+#     clusterSelector:
+#       labels:
+#         env: test
+#     helm:
+#       valuesFiles:
+#         - env/test.yaml
