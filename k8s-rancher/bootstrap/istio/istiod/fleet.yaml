@@ -6,7 +6,7 @@ helm:
   version: 1.26.3
 
 dependsOn:
-  - name: istio-base
+  - name: istio-base-k8s-rancher-bootstrap-istio-base
 
 targetCustomizations:
   - name: test
