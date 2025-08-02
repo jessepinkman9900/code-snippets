@@ -32,6 +32,10 @@ clusters = [
       environment = "test"
       app_prefix  = "rancher"
     }
+    labels = {
+      environment = "test"
+      "provider.cattle.io" = "eks"
+    }
   },
   {
     cluster_id         = "001"
@@ -58,6 +62,10 @@ clusters = [
     tags = {
       environment = "test"
       app_prefix  = "rancher"
+    }
+    labels = {
+      environment = "test"
+      "provider.cattle.io" = "eks"
     }
   }
 ]

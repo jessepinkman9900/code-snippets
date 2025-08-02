@@ -9,6 +9,7 @@ resource "rancher2_cloud_credential" "aws" {
 
 resource "rancher2_cluster" "eks" {
   name = "${var.common_tags.app_prefix}-${var.common_tags.environment}-eks-${var.cluster.cluster_id}-${var.cluster.aws_region}"
+  labels = var.cluster.labels
 
   eks_config_v2 {
     cloud_credential_id = rancher2_cloud_credential.aws.id
