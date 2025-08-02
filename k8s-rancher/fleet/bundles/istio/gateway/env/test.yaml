@@ -1,8 +1,9 @@
 service:
   type: LoadBalancer
+autoscale:
+  enabled: false
+replicas: 1
 resources:
   requests:
     cpu: 50m
     memory: 64Mi
-
-  
