@@ -39,3 +39,8 @@ resource "rancher2_cluster" "eks" {
 output "cluster_id" {
   value = rancher2_cluster.eks.id
 }
+
+resource "local_file" "kube_config_yaml" {
+  filename = "${path.root}/.output/${var.common_tags.environment}/eks/${var.cluster.cluster_id}/${var.cluster.aws_region}/kube_config_eks.yaml"
+  content = rancher2_cluster.eks.kube_config
+}
