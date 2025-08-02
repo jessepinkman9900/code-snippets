@@ -1,0 +1,10 @@
+apiVersion: fleet.cattle.io/v1alpha1
+kind: GitRepo
+metadata:
+  name: istio-base
+  namespace: fleet-local
+spec:
+  repo: https://github.com/jessepinkman9900/code-snippets.git
+  branch: fleet # todo: main
+  paths:
+    - k8s-rancher/bootstrap/istio/base
