@@ -5,14 +5,14 @@ helm:
   chart: gateway
   version: 1.26.3
 
-dependsOn:
-  - name: code-snippets-k8s-rancher-bootstrap-istio-istiod
+# dependsOn:
+#   - name: code-snippets-k8s-rancher-bootstrap-istio-istiod
 
-# targetCustomizations:
-#   - name: test
-#     clusterSelector:
-#       labels:
-#         env: test
-#     helm:
-#       valuesFiles:
-#         - env/test.yaml
+targetCustomizations:
+  - name: test
+    clusterSelector:
+      labels:
+        environment: test
+    helm:
+      valuesFiles:
+        - env/test.yaml
