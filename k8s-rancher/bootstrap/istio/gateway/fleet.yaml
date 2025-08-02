@@ -5,8 +5,8 @@ helm:
   chart: gateway
   version: 1.26.3
 
-# dependsOn:
-#   - name: code-snippets-k8s-rancher-bootstrap-istio-istiod
+dependsOn:
+  - name: istio-istiod
 
 targetCustomizations:
   - name: test

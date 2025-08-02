@@ -1,16 +1,17 @@
 apiVersion: fleet.cattle.io/v1alpha1
 kind: GitRepo
 metadata:
-  name: istio-control-plane
+  name: istio-all
   namespace: fleet-default
 spec:
   repo: https://github.com/jessepinkman9900/code-snippets.git
   branch: fleet # todo: main
   paths:
+    - k8s-rancher/bootstrap/istio/base
     - k8s-rancher/bootstrap/istio/istiod
+    - k8s-rancher/bootstrap/istio/gateway
   targets:
     - name: test
       clusterSelector:
         matchLabels:
           environment: test
-
