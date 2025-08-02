@@ -20,44 +20,44 @@ init:
 #   k3d cluster delete local-k3s
 
 [group('aws')]
-up-network env=test:
+up-network env="test":
   cd terraform/environments/{{env}}/aws/0_network && dotenvx run -f .env -- terraform init && dotenvx run -f .env -- terraform apply -var-file=terraform.tfvars
   echo "Network created"
   echo "Before running just up-rancher, update terraform/environments/{{env}}/aws/1_rancher/terraform.tfvars with vpc_id and public_subnet_id"
 
 [group('aws')]
-up-rancher env=test:
+up-rancher env="test":
   cd terraform/environments/{{env}}/aws/1_rancher && dotenvx run -f .env -- terraform init && dotenvx run -f .env -- terraform apply -var-file=terraform.tfvars
   echo "Rancher server created"
   echo "Before running just up-cluster, update terraform/environments/{{env}}/aws/2_clusters/terraform.tfvars with vpc_id and public_subnet_id & update secret.tfvars with rancher api key and secret"
 
 [group('aws')]
-up-cluster env=test:
+up-cluster env="test":
   cd terraform/environments/{{env}}/aws/2_clusters && dotenvx run -f .env -- terraform init && dotenvx run -f .env -- terraform apply -var-file=terraform.tfvars -var-file=secret.tfvars
   echo "EKS clusters created"
 
 [group('aws')]
-down env=test:
+down env="test":
   cd terraform/environments/{{env}}/aws/2_clusters && dotenvx run -f .env -- terraform destroy
   cd terraform/environments/{{env}}/aws/1_rancher && dotenvx run -f .env -- terraform destroy
   cd terraform/environments/{{env}}/aws/0_network && dotenvx run -f .env -- terraform destroy
   echo "All resources deleted"
 
 [group('aws')]
-down-cluster env=test:
+down-cluster env="test":
   cd terraform/environments/{{env}}/aws/2_clusters && dotenvx run -f .env -- terraform destroy
   echo "EKS clusters deleted"
 
 [group('aws')]
-down-rancher env=test:
+down-rancher env="test":
   cd terraform/environments/{{env}}/aws/1_rancher && dotenvx run -f .env -- terraform destroy
   echo "Rancher server deleted"
 
 [group('aws')]
-down-network env=test:
+down-network env="test":
   cd terraform/environments/{{env}}/aws/0_network && dotenvx run -f .env -- terraform destroy
   echo "Network deleted"
 
 [group('aws')]
-fleet-apply env=test:
+fleet-apply env="test":
   kubectl --kubeconfig terraform/environments/{{env}}/aws/1_rancher/.output/{{env}}/rancher_node/kube_config_server.yaml apply -f fleet/fleet.yaml
