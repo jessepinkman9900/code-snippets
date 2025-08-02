@@ -24,7 +24,9 @@ Code snippets
   - pglite + pglite-socket to be able to use psql with pglite
   - can use for running in memory postgres for testing in k8s env without access to local file system where traditional postgres cannot run
 
-## Kube Operators
+## K8s
+- [rancher + multi region eks cluster](k8s-rancher)
+  - terraform provisions networks, rancher management server & multi region eks clusters
 - [kubers-ingress-operator](kubers-ingress-operator)
   - pay to call api 
     - solidity smart contract for payments + k8s operator & custom ingress auth middleware to allow access upon payment using digital signature as api key
