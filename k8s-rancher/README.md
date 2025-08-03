@@ -204,3 +204,10 @@ graph TD
   - workload migration during cluster upgrades (k8 upgrade, mesh upgrade, etc)
 - alerting
   - add alerting stack - email, slack, etc
+
+## Tools
+- [terraform](https://developer.hashicorp.com/terraform)
+- [rancher](https://rancher.com)
+- [fleet](https://fleet.rancher.io)
+- [helm](https://helm.sh)
+- [k3s](https://k3s.io) - lightweight k8s on ec2 node for rancher management server
