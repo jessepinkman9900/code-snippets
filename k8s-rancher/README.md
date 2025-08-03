@@ -224,6 +224,7 @@ graph TD
 - while running tf destroy in cluster dir it only deletes the rancher cluster registration & not the cluster
   - clusters get deleted when the vpc is deleted, i.e tf destroy in network dir
 - track terraform operations on AWS CloudTrail
+- track all resources in region - AWS Resource Groups
 
 # AWS Resources
 - network
@@ -240,3 +241,4 @@ graph TD
   - ec2 key pairs
   - elatic ip
   - eks cluster
+- cloudformation
