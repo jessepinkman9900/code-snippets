@@ -5,8 +5,8 @@ helm:
   chart: gateway
   version: 1.26.3
 
-dependsOn:
-  - name: istio-base
+# dependsOn:
+#   - name: istio-base
 
 targetCustomizations:
   - name: test
