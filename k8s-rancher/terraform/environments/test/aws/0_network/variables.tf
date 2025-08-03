@@ -13,10 +13,13 @@ variable "common_tags" {
 
 # required
 variable "network_config" {
-  type = map(object({
-    region             = string
-    vpc_cidr_block     = string
-    enable_nat_gateway = bool
-    single_nat_gateway = bool
-  }))
+  type = object({
+    enable_vpc_peering = bool,
+    regions = map(object({
+      region             = string
+      vpc_cidr_block     = string
+      enable_nat_gateway = bool
+      single_nat_gateway = bool
+    }))
+  })
 }
