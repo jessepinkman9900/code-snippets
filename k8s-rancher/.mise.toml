@@ -12,3 +12,4 @@ go = "1.24.4"
 terraform = "1.12.2"
 # env var
 "aqua:dotenvx/dotenvx" = "1.45.2"
+istioctl = "1.26.3"

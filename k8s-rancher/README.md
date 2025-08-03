@@ -200,6 +200,9 @@ graph TD
 - k8s
   - add gpu & cpu node pools
   - operator with node affinity
+  - HPA metrics server
+  - keda
+  - istio - cluster peering
 - cluster operations
   - workload migration during cluster upgrades (k8 upgrade, mesh upgrade, etc)
 - alerting
