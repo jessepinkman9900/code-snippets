@@ -13,7 +13,7 @@ graph TD
 ```
 .
 ├── fleet       # post provisioning k8s cluster setup
-├── terraform   # provisioning k8s cluster
+├── terraform   # provisioning rancher management cluster & downstreamk8s cluster
 └── README.md
 ```
 
@@ -24,9 +24,11 @@ graph TD
   - AmazonEC2FullAccess
   - IAMFullAccess
   - AWSCloudFormationFullAccess
-  - custom policy - * on eks
+  - custom policy - * (list, describe, create, etc) on eks
 
 ```sh
+# create IAM user & attach policies defined above
+
 # root dir - k8s-rancher
 cd terraform
 # 1. create vpc & subnets (public, private w NAT) in aws-me-central-1 & aws-me-south-1
