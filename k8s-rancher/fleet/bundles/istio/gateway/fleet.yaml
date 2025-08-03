@@ -6,7 +6,7 @@ helm:
   version: 1.26.3
 
 dependsOn:
-  - name: istio-istiod
+  - name: istio-base
 
 targetCustomizations:
   - name: test
