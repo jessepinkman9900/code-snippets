@@ -9,6 +9,80 @@ graph TD
   rancher_server -->|manage| eks-cluster-001-me-south-1
 ```
 
+## Folder Structure
+```
+.
+├── fleet       # post provisioning k8s cluster setup
+├── terraform   # provisioning k8s cluster
+└── README.md
+```
+
+## Rancher + Multi Region EKS Deployment
+- AWS IAM Policies
+  - AmazonEKSComputePolicy
+  - AmazonVPCFullAccess
+  - AmazonEC2FullAccess
+  - IAMFullAccess
+  - AWSCloudFormationFullAccess
+  - custom policy - * on eks
+
+```sh
+# root dir - k8s-rancher
+cd terraform
+# 1. create vpc & subnets (public, private w NAT) in aws-me-central-1 & aws-me-south-1
+cd environments/test/aws/0_network
+echo "AWS_ACCESS_KEY_ID=your_access_key_id" > .env
+echo "AWS_SECRET_ACCESS_KEY=your_secret_access_key" >> .env
+dotenvx run -f .env -- terraform init
+dotenvx run -f .env -- terraform apply -var-file=terraform.tfvars
+# dotenvx run -f .env -- terraform destroy
+cd -
+
+# 2. create rancher server in aws-me-central-1 public subnet
+cd environments/test/aws/1_rancher
+echo "AWS_ACCESS_KEY_ID=your_access_key_id" > .env
+echo "AWS_SECRET_ACCESS_KEY=your_secret_access_key" >> .env
+dotenvx run -f .env -- terraform init
+dotenvx run -f .env -- terraform apply -var-file=terraform.tfvars
+# dotenvx run -f .env -- terraform destroy
+cd -
+
+# 2.1 - access rancher ui & create api key
+# to to rancher ui - https://{rancher_server_dns}
+# sign in with password - adminadminadmin
+# gen api key - profile picture -> account & api keys -> create API key
+
+# 3. create eks cluster in aws-me-central-1 & aws-me-south-1 public subnets
+cd environments/test/aws/2_clusters
+echo "AWS_ACCESS_KEY_ID=your_access_key_id" > .env
+echo "AWS_SECRET_ACCESS_KEY=your_secret_access_key" >> .env
+# update values in secret.tfvars
+cp secret.tfvars.example secret.tfvars
+dotenvx run -f .env -- terraform init
+dotenvx run -f .env -- terraform apply -var-file=terraform.tfvars -var-file=secret.tfvars
+# dotenvx run -f .env -- terraform destroy
+cd -
+```
+
+### Rancher UI after cluster deployment
+![](docs/images/rancher-clusters.png)
+
+### Fleet UI after cluster group
+```
+just fleet-apply-cluster-group env="test"
+```
+![](docs/images/fleet-cluster-group.png)
+
+### Fleet UI after gitrepo bundles
+```
+just fleet-apply-gitrepo env="test"
+```
+![](docs/images/fleet-gitrepo.png)
+![](docs/images/fleet-istio-bundles.png)
+
+## Architecture
+### Network 
+
 ```mermaid
 ---
 title: AWS VPC & Subnets
@@ -89,60 +163,6 @@ graph TD
     public-subnet-me-south-1c <---> me-south-1-internet-gateway
 ```
 
-## Folder Structure
-```
-.
-├── fleet       # post provisioning k8s cluster setup
-├── terraform   # provisioning k8s cluster
-└── README.md
-```
-
-## Rancher + Multi Region EKS Deployment
-- AWS IAM Policies
-  - AmazonEKSComputePolicy
-  - AmazonVPCFullAccess
-  - AmazonEC2FullAccess
-  - IAMFullAccess
-  - AWSCloudFormationFullAccess
-  - custom policy - * on eks
-
-```sh
-# root dir - k8s-rancher
-cd terraform
-# 1. create vpc & subnets (public, private w NAT) in aws-me-central-1 & aws-me-south-1
-cd environments/test/aws/0_network
-echo "AWS_ACCESS_KEY_ID=your_access_key_id" > .env
-echo "AWS_SECRET_ACCESS_KEY=your_secret_access_key" >> .env
-dotenvx run -f .env -- terraform init
-dotenvx run -f .env -- terraform apply -var-file=terraform.tfvars
-# dotenvx run -f .env -- terraform destroy
-cd -
-
-# 2. create rancher server in aws-me-central-1 public subnet
-cd environments/test/aws/1_rancher
-echo "AWS_ACCESS_KEY_ID=your_access_key_id" > .env
-echo "AWS_SECRET_ACCESS_KEY=your_secret_access_key" >> .env
-dotenvx run -f .env -- terraform init
-dotenvx run -f .env -- terraform apply -var-file=terraform.tfvars
-# dotenvx run -f .env -- terraform destroy
-cd -
-
-# 2.1 - access rancher ui & create api key
-# to to rancher ui - https://{rancher_server_dns}
-# sign in with password - adminadminadmin
-# gen api key - profile picture -> account & api keys -> create API key
-
-# 3. create eks cluster in aws-me-central-1 & aws-me-south-1 public subnets
-cd environments/test/aws/2_clusters
-echo "AWS_ACCESS_KEY_ID=your_access_key_id" > .env
-echo "AWS_SECRET_ACCESS_KEY=your_secret_access_key" >> .env
-# update values in secret.tfvars
-cp secret.tfvars.example secret.tfvars
-dotenvx run -f .env -- terraform init
-dotenvx run -f .env -- terraform apply -var-file=terraform.tfvars -var-file=secret.tfvars
-# dotenvx run -f .env -- terraform destroy
-cd -
-```
-
 # Useful links
 - [CIDR Calculator](https://cidr.xyz/)
+
