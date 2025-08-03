@@ -38,9 +38,9 @@ up-cluster env="test":
 
 [group('aws')]
 down env="test":
-  cd terraform/environments/{{env}}/aws/2_clusters && dotenvx run -f .env -- terraform destroy
-  cd terraform/environments/{{env}}/aws/1_rancher && dotenvx run -f .env -- terraform destroy
-  cd terraform/environments/{{env}}/aws/0_network && dotenvx run -f .env -- terraform destroy
+  cd terraform/environments/{{env}}/aws/2_clusters && dotenvx run -f .env -- terraform destroy -var-file=terraform.tfvars -var-file=secret.tfvars
+  cd terraform/environments/{{env}}/aws/1_rancher && dotenvx run -f .env -- terraform destroy -var-file=terraform.tfvars
+  cd terraform/environments/{{env}}/aws/0_network && dotenvx run -f .env -- terraform destroy -var-file=terraform.tfvars
   echo "All resources deleted"
 
 [group('aws')]

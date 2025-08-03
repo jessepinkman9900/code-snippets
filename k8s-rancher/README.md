@@ -105,6 +105,12 @@ just fleet-apply-gitrepo env="test"
 ## Architecture
 ### Network 
 - each private subnet has a NAT gateway to avoid central point of failure when the az containing the NAT gateway is in outage
+- subnets
+  - 1 public subnet per az
+  - 1 private subnet per az
+- route tables
+  - 1 public route table per region
+  - 1 private route table per az
 
 ```mermaid
 ---
@@ -204,6 +210,8 @@ graph TD
   - workload migration during cluster upgrades (k8 upgrade, mesh upgrade, etc)
 - alerting
   - add alerting stack - email, slack, etc
+- cluster provisioning
+  - is it better to provision directly on aws & then register it on rancher? how will fleet be setup on the new cluster?
 
 ## Tools
 - [terraform](https://developer.hashicorp.com/terraform)
@@ -211,3 +219,24 @@ graph TD
 - [fleet](https://fleet.rancher.io)
 - [helm](https://helm.sh)
 - [k3s](https://k3s.io) - lightweight k8s on ec2 node for rancher management server
+
+## Notes
+- while running tf destroy in cluster dir it only deletes the rancher cluster registration & not the cluster
+  - clusters get deleted when the vpc is deleted, i.e tf destroy in network dir
+- track terraform operations on AWS CloudTrail
+
+# AWS Resources
+- network
+  - vpc
+  - vpc peering
+  - route tables
+  - subnets
+  - security groups
+  - internet gateway
+  - nat gateway
+- compute
+  - ec2
+  - ec2 autoscaling groups
+  - ec2 key pairs
+  - elatic ip
+  - eks cluster
