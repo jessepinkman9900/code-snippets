@@ -70,13 +70,13 @@ cd -
 ![](docs/images/rancher-clusters.png)
 
 ### Fleet UI after cluster group
-```
+```sh
 just fleet-apply-cluster-group env="test"
 ```
 ![](docs/images/fleet-cluster-group.png)
 
 ### Fleet UI after gitrepo bundles
-```
+```sh
 just fleet-apply-gitrepo env="test"
 ```
 ![](docs/images/fleet-gitrepo.png)
