@@ -5,7 +5,7 @@ metadata:
   namespace: fleet-default
 spec:
   repo: https://github.com/jessepinkman9900/code-snippets.git
-  branch: fleet # todo: main
+  branch: main
   paths:
     - k8s-rancher/fleet/bundles/istio/base
     - k8s-rancher/fleet/bundles/istio/istiod
