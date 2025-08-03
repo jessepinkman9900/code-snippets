@@ -58,6 +58,20 @@ down-network env="test":
   cd terraform/environments/{{env}}/aws/0_network && dotenvx run -f .env -- terraform destroy
   echo "Network deleted"
 
+# apply cluster groups & gitrepos
 [group('aws')]
-fleet-apply env="test":
-  kubectl --kubeconfig terraform/environments/{{env}}/aws/1_rancher/.output/{{env}}/rancher_node/kube_config_server.yaml apply -f fleet/fleet.yaml
+fleet-apply-all env="test":
+  echo "Applying cluster groups"
+  kubectl --kubeconfig terraform/environments/{{env}}/aws/1_rancher/.output/{{env}}/rancher_node/kube_config_server.yaml apply -f fleet/cluster-groups/{{env}}.yaml
+  echo "Applying gitrepos"
+  kubectl --kubeconfig terraform/environments/{{env}}/aws/1_rancher/.output/{{env}}/rancher_node/kube_config_server.yaml apply -f fleet/gitrepos/istio/istio-all.yaml
+
+[group('aws')]
+fleet-apply-cluster-group env="test":
+  echo "Applying cluster groups"
+  kubectl --kubeconfig terraform/environments/{{env}}/aws/1_rancher/.output/{{env}}/rancher_node/kube_config_server.yaml apply -f fleet/cluster-groups/{{env}}.yaml
+
+[group('aws')]
+fleet-apply-gitrepo env="test":
+  echo "Applying gitrepos"
+  kubectl --kubeconfig terraform/environments/{{env}}/aws/1_rancher/.output/{{env}}/rancher_node/kube_config_server.yaml apply -f fleet/gitrepos/istio/istio-all.yaml
