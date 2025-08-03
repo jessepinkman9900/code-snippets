@@ -26,7 +26,14 @@ Code snippets
 
 ## K8s
 - [rancher + multi region eks cluster](k8s-rancher)
-  - terraform provisions networks, rancher management server & multi region eks clusters
+  - provision infrastructure using terraform
+    - network - vpc & subnets (public, private w NAT)
+    - rancher management server - ec2 server w k3s & rancher
+    - downstream clusters - eks clusters in 2 aws regions
+  - post-provisioning downstream cluster setup using rancher fleet
+    - use fleet to create cluster groups
+    - use fleet gitrepo bundles to setup
+      - istio
 - [kubers-ingress-operator](kubers-ingress-operator)
   - pay to call api 
     - solidity smart contract for payments + k8s operator & custom ingress auth middleware to allow access upon payment using digital signature as api key

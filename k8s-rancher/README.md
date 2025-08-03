@@ -1,4 +1,12 @@
 # Rancher + Multi Region EKS Deployment
+- provision infrastructure using terraform
+  - network - vpc & subnets (public, private w NAT)
+  - rancher management server - ec2 server w k3s & rancher
+  - downstream clusters - eks clusters in diff aws regions
+- post-provisioning downstream cluster setup using rancher fleet
+  - use fleet to create cluster groups
+  - use fleet gitrepo bundles to setup
+    - istio
 
 ```mermaid
 ---
