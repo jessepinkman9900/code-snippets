@@ -1,0 +1,16 @@
+---
+apiVersion: fleet.cattle.io/v1alpha1
+kind: ClusterGroup
+
+metadata:
+  name: test-001
+  namespace: fleet-default
+  annotations:
+    field.cattle.io/description: Test cluster group
+
+spec:
+  selector:
+    matchLabels:
+      environment: test
+      cluster_id: "001"
+---
