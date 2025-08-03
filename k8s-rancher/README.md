@@ -56,26 +56,34 @@ cd -
 cd environments/test/aws/1_rancher
 echo "AWS_ACCESS_KEY_ID=your_access_key_id" > .env
 echo "AWS_SECRET_ACCESS_KEY=your_secret_access_key" >> .env
+# TODO: update vpc_id & public_subnet_id in terraform.tfvars
+# pick any public subnet from aws-me-central-1
 dotenvx run -f .env -- terraform init
 dotenvx run -f .env -- terraform apply -var-file=terraform.tfvars
 # dotenvx run -f .env -- terraform destroy
 cd -
+# NOTE: ssh keys & kube config file are written into terraform/environments/test/aws/1_rancher/.output
 
 # 2.1 - access rancher ui & create api key
-# to to rancher ui - https://{rancher_server_dns}
+# NOTE: use `rancher_server_dns` output from previous step
+# go to rancher ui - https://{rancher_server_dns} 
 # sign in with password - adminadminadmin
-# gen api key - profile picture -> account & api keys -> create API key
+# TODO: gen api key to create clusters
+#  - profile picture -> account & api keys -> create API key no scope
 
 # 3. create eks cluster in aws-me-central-1 & aws-me-south-1 public subnets
 cd environments/test/aws/2_clusters
 echo "AWS_ACCESS_KEY_ID=your_access_key_id" > .env
 echo "AWS_SECRET_ACCESS_KEY=your_secret_access_key" >> .env
-# update values in secret.tfvars
+# TODO: update values in secret.tfvars
 cp secret.tfvars.example secret.tfvars
+# TODO: update values in terraform.tfvars
+# add all public subnets from aws-me-central-1 for cluster in me-central-1 & same for aws-me-south-1
 dotenvx run -f .env -- terraform init
 dotenvx run -f .env -- terraform apply -var-file=terraform.tfvars -var-file=secret.tfvars
 # dotenvx run -f .env -- terraform destroy
 cd -
+# NOTE: kube config file are written into terraform/environments/test/aws/2_clusters/.output
 ```
 
 ### Rancher UI after cluster deployment
