@@ -212,6 +212,9 @@ graph TD
   - add alerting stack - email, slack, etc
 - cluster provisioning
   - is it better to provision directly on aws & then register it on rancher? how will fleet be setup on the new cluster?
+- local k3s cluster for fleet testing
+  - setup rancher management cluster & downstream cluster on k3s
+  - installing helm charts - [link](https://docs.k3s.io/installation/packaged-components)
 
 ## Tools
 - [terraform](https://developer.hashicorp.com/terraform)
