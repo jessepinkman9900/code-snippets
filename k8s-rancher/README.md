@@ -84,6 +84,7 @@ just fleet-apply-gitrepo env="test"
 
 ## Architecture
 ### Network 
+- each private subnet has a NAT gateway to avoid central point of failure when the az containing the NAT gateway is in outage
 
 ```mermaid
 ---
@@ -165,6 +166,21 @@ graph TD
     public-subnet-me-south-1c <---> me-south-1-internet-gateway
 ```
 
-# Useful links
+## Useful links
 - [CIDR Calculator](https://cidr.xyz/)
 
+## TODO
+- terraform
+  - set s3 backend
+- fleet
+  - add velero for k8 backups
+  - add operators
+  - add observability stack
+  - add cluster policies
+- k8s
+  - add gpu & cpu node pools
+  - operator with node affinity
+- cluster operations
+  - workload migration during cluster upgrades (k8 upgrade, mesh upgrade, etc)
+- alerting
+  - add alerting stack - email, slack, etc
