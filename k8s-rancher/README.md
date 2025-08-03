@@ -216,6 +216,7 @@ graph TD
   - setup rancher management cluster & downstream cluster on k3s
   - installing helm charts - [link](https://docs.k3s.io/installation/packaged-components)
   - cluster config file using [k3d](https://k3d.io/stable/usage/configfile/)
+  - or [kind](https://github.com/kubernetes-sigs/kind)
 
 ## Tools
 - [terraform](https://developer.hashicorp.com/terraform)
