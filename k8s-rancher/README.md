@@ -35,6 +35,10 @@ graph TD
   - custom policy - * (list, describe, create, etc) on eks
 
 ```sh
+# install tools
+# mise - https://mise.jdx.dev/installing-mise.html
+mise install
+
 # create IAM user & attach policies defined above
 
 # root dir - k8s-rancher
