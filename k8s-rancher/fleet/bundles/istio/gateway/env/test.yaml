@@ -1,8 +1,8 @@
 service:
   type: LoadBalancer
-autoscale:
+autoscaling:
   enabled: false
-replicas: 1
+replicaCount: 1
 resources:
   requests:
     cpu: 50m
