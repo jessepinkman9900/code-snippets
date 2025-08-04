@@ -170,6 +170,9 @@ id_rsa*
 .output
 
 # scratch
-.scratch
+.scratch*
 secret.tfvars
+
+# idea file
+.ideas
 
