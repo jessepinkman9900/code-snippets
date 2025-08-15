@@ -1,0 +1,38 @@
+[private]
+default:
+    just --list
+
+[group('aws')]
+up env='test':
+  cd infra/terraform/environments/{{env}} && dotenvx run -f .env -- terraform apply
+
+[group('dev')]
+ssh env='test':
+  #!/usr/bin/env bash
+  cd infra/terraform/environments/{{env}}
+  KEY_PATH=$(terraform output -raw shh_private_key_local_path)
+  USERNAME=$(terraform output -raw node_username)
+  PUBLIC_IP=$(terraform output -raw node_public_ip)
+  ssh -i "$KEY_PATH" "$USERNAME@$PUBLIC_IP"
+
+[group('dev')]
+config-ssh env='test':
+  #!/usr/bin/env bash
+  cd infra/terraform/environments/{{env}}
+  KEY_PATH=$(terraform output -raw shh_private_key_local_path)
+  USERNAME=$(terraform output -raw node_username)
+  PUBLIC_IP=$(terraform output -raw node_public_ip)
+  env={{env}}
+  
+  # Remove existing entry if it exists
+  sed -i '' "/^Host llm-serving-{{env}}-gpu-ec2$/,/^$/d" ~/.ssh/config
+  
+  # Add SSH config entry
+  echo "" >> ~/.ssh/config
+  echo "Host llm-serving-{{env}}-gpu-ec2" >> ~/.ssh/config
+  echo "    HostName $PUBLIC_IP" >> ~/.ssh/config
+  echo "    User $USERNAME" >> ~/.ssh/config
+  echo "    IdentityFile $PWD/$KEY_PATH" >> ~/.ssh/config
+  
+  echo "Added SSH config entry: llm-serving-{{env}}-gpu-ec2"
+  echo "You can now connect with: ssh llm-serving-{{env}}-gpu-ec2"

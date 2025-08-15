@@ -176,3 +176,9 @@ secret.tfvars
 # idea file
 .ideas
 
+# incomplete
+api-routing-rs-v8
+arkworks-merkle-tree-tutorial
+daft-s3-clickhouse
+kubebuilder-cronjob-tutorial
+yaml2reactflow
