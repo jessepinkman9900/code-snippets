@@ -59,9 +59,17 @@ init email:
   # source
   source ~/.bashrc
   # install tools
-  sudo apt install -y htop sysstat iostat net-tools
+  sudo apt install -y htop sysstat net-tools
 
 [group('remote')]
 init-serving:
   # install vllm
   uv sync && uv pip install vllm --torch-backend=auto
+
+[group('vllm')]
+vllm-up:
+  cd docker && dotenvx run -f .env -- docker compose up -d
+
+[group('vllm')]
+vllm-eval tasks='gsm8k':
+  lm_eval --model local-completions --tasks {{tasks}} --model_args model=google/gemma-3-1b-it,base_url=http://localhost:8000/v1/completions,num_concurrent=8,max_retries=3,tokenized_requests=False

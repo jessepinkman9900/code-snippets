@@ -35,6 +35,7 @@ source .venv/bin/activate
 
 # download model
 dotenvx run -f .env -- hf download google/gemma-3-1b-it
+dotenvx run -f .env -- hf download google/gemma-3-4b-it
 ```
 
 # vLLM Serving
@@ -98,5 +99,17 @@ docker pull vllm/vllm-openai:v0.10.0
 docker pull ghcr.io/open-webui/open-webui:v0.6.22
 
 # docker compose up
-docker compose up -d
+cd docker
+dotenvx run -f .env -- docker compose up -d
+```
+
+## Evals
+```bash
+just vllm-eval tasks='gsm8k'
+```
+```
+|Tasks|Version|     Filter     |n-shot|  Metric   |   |Value |   |Stderr|
+|-----|------:|----------------|-----:|-----------|---|-----:|---|-----:|
+|gsm8k|      3|flexible-extract|     5|exact_match|↑  |0.2563|±  | 0.012|
+|     |       |strict-match    |     5|exact_match|↑  |0.2555|±  | 0.012|
 ```
