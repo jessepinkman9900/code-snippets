@@ -3,10 +3,14 @@ default:
     just --list
 
 [group('aws')]
-up env='test':
+apply env='test':
   cd infra/terraform/environments/{{env}} && dotenvx run -f .env -- terraform apply
 
-[group('dev')]
+[group('aws')]
+destroy env='test':
+  cd infra/terraform/environments/{{env}} && dotenvx run -f .env -- terraform destroy
+
+[group('local')]
 ssh env='test':
   #!/usr/bin/env bash
   cd infra/terraform/environments/{{env}}
@@ -15,7 +19,7 @@ ssh env='test':
   PUBLIC_IP=$(terraform output -raw node_public_ip)
   ssh -i "$KEY_PATH" "$USERNAME@$PUBLIC_IP"
 
-[group('dev')]
+[group('local')]
 config-ssh env='test':
   #!/usr/bin/env bash
   cd infra/terraform/environments/{{env}}
@@ -36,3 +40,17 @@ config-ssh env='test':
   
   echo "Added SSH config entry: llm-serving-{{env}}-gpu-ec2"
   echo "You can now connect with: ssh llm-serving-{{env}}-gpu-ec2"
+
+[group('remote')]
+init email:
+  #!/usr/bin/env bash
+  git config --global user.email "{{email}}"
+  # install mise
+  sudo apt update -y && sudo apt install -y gpg sudo wget curl
+  sudo install -dm 755 /etc/apt/keyrings
+  wget -qO - https://mise.jdx.dev/gpg-key.pub | gpg --dearmor | sudo tee /etc/apt/keyrings/mise-archive-keyring.gpg 1> /dev/null
+  echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch=amd64] https://mise.jdx.dev/deb stable main" | sudo tee /etc/apt/sources.list.d/mise.list
+  sudo apt update
+  sudo apt install -y mise
+  # install vllm
+  cd workspace/code-snippets/ml/llm-serving && uv pip install vllm --torch-backend=auto

@@ -1,0 +1,10 @@
+[project]
+name = "llm-serving"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "huggingface_hub>=0.20.0",
+    "click>=8.0.0",
+]
