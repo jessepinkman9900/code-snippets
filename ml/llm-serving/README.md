@@ -20,6 +20,19 @@ cd code-snippets/ml/llm-serving
 just init email='<email for github>'
 ```
 
+## Downloading models
+```bash
+# on ec2 instance
+cp .env.example .env
+# update env var
+
+just init-serving
+source .venv/bin/activate
+
+# download model
+dotenvx run -f .env -- hf download google/gemma-3-1b-it
+```
+
 # vLLM Serving
 ```bash
 # on ec2 instance
