@@ -52,5 +52,12 @@ init email:
   echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.gpg arch=amd64] https://mise.jdx.dev/deb stable main" | sudo tee /etc/apt/sources.list.d/mise.list
   sudo apt update
   sudo apt install -y mise
+  echo 'eval "$(/usr/bin/mise activate bash)"' >> ~/.bashrc
+  # install deps
+  mise trust
+  mise install
+
+[group('remote')]
+init-serving:
   # install vllm
-  cd workspace/code-snippets/ml/llm-serving && uv pip install vllm --torch-backend=auto
+  uv sync && uv pip install vllm --torch-backend=auto

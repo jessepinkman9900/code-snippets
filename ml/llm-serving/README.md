@@ -20,16 +20,52 @@ cd code-snippets/ml/llm-serving
 just init email='<email for github>'
 ```
 
-## Model Serving
+# vLLM Serving
 ```bash
+# on ec2 instance
+# install vllm
+just init-serving
+source .venv/bin/activate
+vllm --help
+
 # set env var
 cp .env.example .env
 
-# download model
-dotenvx run -f .env -- uv run src/download-model.py --help
-dotenvx run -f .env -- uv run src/download-model.py --model google/gemma-2-2b-it
-
 # serve model
-dotenvx run -f .env -- uv run src/serve-model.py --help
-dotenvx run -f .env -- uv run src/serve-model.py --model google/gemma-2-2b-it
+dotenvx run -f .env -- vllm serve google/gemma-3-1b-it --gpu-memory-utilization 0.6
+# --gpu-memory-utilization: fraction of GPU memory to use. default 0.9
+
+
+# benchmark server
+dotenvx run -f .env -- vllm bench serve --model google/gemma-3-1b-it --dataset-name random --random-input-len 256 --request-rate 4
+```
+
+## Benchmark Results
+
+```bash
+dotenvx run -f .env -- vllm serve google/gemma-3-1b-it --gpu-memory-utilization 0.9 --max-model-len 2048 --max-num-seqs 32 --max-num-batched-tokens 4096 --enable-chunked-prefill --dtype float16
+dotenvx run -f .env -- vllm bench serve --model google/gemma-3-1b-it --dataset-name random --random-input-len 256 --request-rate 12
+```
+```
+============ Serving Benchmark Result ============
+Successful requests:                     1000      
+Benchmark duration (s):                  84.84     
+Total input tokens:                      254747    
+Total generated tokens:                  118937    
+Request throughput (req/s):              11.79     
+Output token throughput (tok/s):         1401.82   
+Total Token throughput (tok/s):          4404.32   
+---------------Time to First Token----------------
+Mean TTFT (ms):                          30.30     
+Median TTFT (ms):                        28.93     
+P99 TTFT (ms):                           48.43     
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          13.21     
+Median TPOT (ms):                        13.34     
+P99 TPOT (ms):                           14.52     
+---------------Inter-token Latency----------------
+Mean ITL (ms):                           13.22     
+Median ITL (ms):                         13.25     
+P99 ITL (ms):                            15.30     
+==================================================
 ```

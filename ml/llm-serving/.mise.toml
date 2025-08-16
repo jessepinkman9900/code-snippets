@@ -1,5 +1,6 @@
 [tools]
 "aqua:dotenvx/dotenvx" = "1.48.4"
 packer = "1.14.1"
+python = "3.12"
 terraform = "1.12.2"
 uv = "0.7.19"
