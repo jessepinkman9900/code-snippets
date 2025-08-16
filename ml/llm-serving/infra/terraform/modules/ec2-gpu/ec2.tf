@@ -22,7 +22,7 @@ resource "aws_instance" "gpu_node" {
   }
 
   root_block_device {
-    volume_size = 100
+    volume_size = 512 
   }
 
   provisioner "remote-exec" {

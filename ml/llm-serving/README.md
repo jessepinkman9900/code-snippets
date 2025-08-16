@@ -86,3 +86,17 @@ Median ITL (ms):                         13.25
 P99 ITL (ms):                            15.30     
 ==================================================
 ```
+
+## Docker Compose
+```bash
+# on ec2 instance
+cp .env.example .env
+# update env var
+
+# pull docker images - very big
+docker pull vllm/vllm-openai:v0.10.0
+docker pull ghcr.io/open-webui/open-webui:v0.6.22
+
+# docker compose up
+docker compose up -d
+```

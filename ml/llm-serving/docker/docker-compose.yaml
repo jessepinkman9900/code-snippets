@@ -34,7 +34,7 @@ services:
       start_period: 120s
 
   open-webui:
-    image: ghcr.io/open-webui/open-webui:v0.6.19
+    image: ghcr.io/open-webui/open-webui:v0.6.22
     ports:
       - "3000:8080"
     volumes:
