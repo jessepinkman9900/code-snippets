@@ -56,6 +56,10 @@ init email:
   # install deps
   mise trust
   mise install
+  # source
+  source ~/.bashrc
+  # install tools
+  sudo apt install -y htop sysstat iostat net-tools
 
 [group('remote')]
 init-serving:

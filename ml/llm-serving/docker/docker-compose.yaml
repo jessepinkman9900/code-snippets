@@ -26,6 +26,12 @@ services:
       "--dtype", "float16"
     ]
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
 
   open-webui:
     image: ghcr.io/open-webui/open-webui:v0.6.19
@@ -33,4 +39,13 @@ services:
       - "3000:8080"
     volumes:
       - ./.data-open-webui:/app/backend/data
+    environment:
+      - OPENAI_API_BASE_URL=http://vllm-server:8000/v1
+      - WEBUI_AUTH=False
     restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
