@@ -1,0 +1,36 @@
+services:
+  vllm-server:
+    image: vllm/vllm-openai:v0.10.0
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    ports:
+      - "8000:8000"
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    environment:
+      - HUGGING_FACE_HUB_TOKEN=${HF_TOKEN}
+    ipc: host
+    command: [
+      "--model", "google/gemma-3-1b-it",
+      "--gpu-memory-utilization", "0.9",
+      "--max-model-len", "2048",
+      "--max-num-seqs", "32",
+      "--max-num-batched-tokens", "4096",
+      "--enable-chunked-prefill",
+      "--dtype", "float16"
+    ]
+    restart: unless-stopped
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:v0.6.19
+    ports:
+      - "3000:8080"
+    volumes:
+      - ./.data-open-webui:/app/backend/data
+    restart: always
