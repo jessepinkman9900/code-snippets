@@ -2,6 +2,10 @@
 
 ## Setup
 ```bash
+cd infra/terraform/environments/test
+cp .env.example .env
+# update env var
+
 # Provision EC2 GPU Node
 just up env='test'
 
