@@ -15,9 +15,9 @@ resource "aws_instance" "gpu_node" {
   instance_market_options {
     market_type = "spot"
     spot_options {
-      instance_interruption_behavior = "terminate"
-      spot_instance_type             = "one-time"
-      max_price                      = "0.50"  # Optional: limit to $0.50/hour
+      instance_interruption_behavior = "stop"
+      spot_instance_type             = "persistent"
+      max_price                      = "1.00"  # Increased for g6.xlarge availability
     }
   }
 

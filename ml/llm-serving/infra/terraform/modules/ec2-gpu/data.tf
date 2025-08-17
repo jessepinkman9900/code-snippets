@@ -40,6 +40,7 @@ data "aws_availability_zones" "available" {
 }
 
 data "aws_ec2_instance_type_offerings" "gpu_zones" {
+  region = var.aws_region
   filter {
     name   = "instance-type"
     values = [var.ec2_config.instance_type]

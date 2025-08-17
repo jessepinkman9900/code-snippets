@@ -1,4 +1,4 @@
-default_aws_region = "sa-east-1"
+default_aws_region = "eu-west-3"
 
 common_tags = {
   environment = "test"

@@ -1,6 +1,7 @@
 # LLM Serving
 
 ## Setup
+### Provision EC2 GPU Node
 ```bash
 cd infra/terraform/environments/test
 cp .env.example .env
@@ -14,7 +15,10 @@ just config-ssh env='test'
 
 # SSH into EC2 GPU Node
 just ssh env='test'
+```
 
+### Setup EC2 GPU Node
+```bash
 # install just on the server
 curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | sudo bash -s -- --to /usr/local/bin
 
