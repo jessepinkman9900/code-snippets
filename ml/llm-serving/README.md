@@ -24,11 +24,10 @@ curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | sudo bash
 
 # install env on the server
 mkdir workspace && cd workspace && git clone https://github.com/jessepinkman9900/code-snippets.git
-cd code-snippets/ml/llm-serving
-just init email='<email for github>'
+cd code-snippets/ml/llm-serving && just init email='<email for github>'
 ```
 
-## Downloading models
+### Downloading models
 ```bash
 # on ec2 instance
 cp .env.example .env
@@ -42,7 +41,7 @@ dotenvx run -f .env -- hf download google/gemma-3-1b-it
 dotenvx run -f .env -- hf download google/gemma-3-4b-it
 ```
 
-# vLLM Serving
+## vLLM Serving
 ```bash
 # on ec2 instance
 # install vllm
@@ -62,7 +61,7 @@ dotenvx run -f .env -- vllm serve google/gemma-3-1b-it --gpu-memory-utilization 
 dotenvx run -f .env -- vllm bench serve --model google/gemma-3-1b-it --dataset-name random --random-input-len 256 --request-rate 4
 ```
 
-## Benchmark Results
+### Benchmark Results
 
 ```bash
 dotenvx run -f .env -- vllm serve google/gemma-3-1b-it --gpu-memory-utilization 0.9 --max-model-len 2048 --max-num-seqs 32 --max-num-batched-tokens 4096 --enable-chunked-prefill --dtype float16
@@ -92,7 +91,7 @@ P99 ITL (ms):                            15.30
 ==================================================
 ```
 
-## Docker Compose
+### Docker Compose
 ```bash
 # on ec2 instance
 cp .env.example .env
@@ -107,7 +106,7 @@ cd docker
 dotenvx run -f .env -- docker compose up -d
 ```
 
-## Evals
+### Evals
 ```bash
 just vllm-eval tasks='gsm8k'
 ```
