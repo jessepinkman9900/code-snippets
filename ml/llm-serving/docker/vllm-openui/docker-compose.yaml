@@ -1,3 +1,4 @@
+name: vllm-openui
 services:
   vllm-server:
     image: vllm/vllm-openai:v0.10.0

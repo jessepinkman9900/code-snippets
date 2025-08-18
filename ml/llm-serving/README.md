@@ -1,4 +1,6 @@
 # LLM Serving
+## Note
+- [latitude.so](https://github.com/latitude-dev/latitude-llm) prompt management setup does not work
 
 ## Setup
 ### Provision EC2 GPU Node
@@ -25,6 +27,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | sudo bash
 # install env on the server
 mkdir workspace && cd workspace && git clone https://github.com/jessepinkman9900/code-snippets.git
 cd code-snippets/ml/llm-serving && just init email='<email for github>'
+source ~/.bashrc
 ```
 
 ### Downloading models
@@ -39,9 +42,13 @@ source .venv/bin/activate
 # download model
 dotenvx run -f .env -- hf download google/gemma-3-1b-it
 dotenvx run -f .env -- hf download google/gemma-3-4b-it
+
+# list downloaded models
+dotenvx run -f .env -- hf cache scan
 ```
 
 ## vLLM Serving
+### Bare Metal
 ```bash
 # on ec2 instance
 # install vllm
@@ -61,7 +68,7 @@ dotenvx run -f .env -- vllm serve google/gemma-3-1b-it --gpu-memory-utilization 
 dotenvx run -f .env -- vllm bench serve --model google/gemma-3-1b-it --dataset-name random --random-input-len 256 --request-rate 4
 ```
 
-### Benchmark Results
+#### Benchmark Results
 
 ```bash
 dotenvx run -f .env -- vllm serve google/gemma-3-1b-it --gpu-memory-utilization 0.9 --max-model-len 2048 --max-num-seqs 32 --max-num-batched-tokens 4096 --enable-chunked-prefill --dtype float16
@@ -102,7 +109,7 @@ docker pull vllm/vllm-openai:v0.10.0
 docker pull ghcr.io/open-webui/open-webui:v0.6.22
 
 # docker compose up
-cd docker
+cd docker/vllm-openui
 dotenvx run -f .env -- docker compose up -d
 ```
 
