@@ -9,20 +9,16 @@ Code snippets
 - [pgrx-data-retention](pgrx-data-retention)
   - pgrx extension based background worker to delete rows from a table based on a retention policy defined in a config table
 
-## Postgres Data Movement
-### Logical Replication
-- [sequin-postgres-cdc](sequin-postgres-cdc)
-  - use sequin to consume postgres logical replication changes & publish to kafka
-- [postgres-stream-using-logical-replication](postgres-stream-using-logical-replication)
-  - use debezium engine + spring boot to consume postgres logical replication changes & publish to kafka
-### COPY 
-- [postgres-stream-using-watermark-table](postgres-stream-using-watermark-table)
-  - use `COPY (..) TO STDOUT` to stream data from postgres to kafka
-
-## PGLite
-- [pgwire-pglite](pgwire-pglite)
-  - pglite + pglite-socket to be able to use psql with pglite
-  - can use for running in memory postgres for testing in k8s env without access to local file system where traditional postgres cannot run
+## LLMs
+- [vllm-openwebui](ml/llm-serving/)
+  - terraform provision ec2 spot g6.xlarge instance
+  - use docker compose to setup vllm inference server for gemma-3-1b-it (huggingface)
+  - use openwebui to access the inference server
+  - lm evaluation harness - gsm8k eval on gemma-3-1b-it
+  - setup traefik rev proxy with subdomain using sslip.io
+  - grafana dashboard for vllm serving metrics
+  - promptfoo eval & model-scan
+  - failed attempt at [latitude.so] setup
 
 ## K8s
 - [rancher + multi region eks cluster](k8s-rancher)
@@ -37,6 +33,21 @@ Code snippets
 - [kubers-ingress-operator](kubers-ingress-operator)
   - pay to call api 
     - solidity smart contract for payments + k8s operator & custom ingress auth middleware to allow access upon payment using digital signature as api key
+
+## Postgres Data Movement
+### Logical Replication
+- [sequin-postgres-cdc](sequin-postgres-cdc)
+  - use sequin to consume postgres logical replication changes & publish to kafka
+- [postgres-stream-using-logical-replication](postgres-stream-using-logical-replication)
+  - use debezium engine + spring boot to consume postgres logical replication changes & publish to kafka
+### COPY 
+- [postgres-stream-using-watermark-table](postgres-stream-using-watermark-table)
+  - use `COPY (..) TO STDOUT` to stream data from postgres to kafka
+
+## PGLite
+- [pgwire-pglite](pgwire-pglite)
+  - pglite + pglite-socket to be able to use psql with pglite
+  - can use for running in memory postgres for testing in k8s env without access to local file system where traditional postgres cannot run
 
 ## Redpanda Connect
 - [redpanda-connect-websocket-source-clickhouse-sink](redpanda-connect-websocket-source-clickhouse-sink)

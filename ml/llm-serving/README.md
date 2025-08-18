@@ -2,6 +2,14 @@
 ## Note
 - [latitude.so](https://github.com/latitude-dev/latitude-llm) prompt management setup does not work
 
+## Folder Structure
+- [infra/terraform](infra/terraform) - terraform code for provisioning ec2 spot g6.xlarge instance
+- [docker/vllm-openui](docker/vllm-openui) - docker compose code for setting up vllm inference server
+- [docker/latitude-llm](docker/latitude-llm) - docker compose code for setting up latitude llm prompt management (doesnt work)
+- other stuff
+  - lm evaluation harness
+  - promptfoo
+
 ## Setup
 ### Provision EC2 GPU Node
 ```bash
