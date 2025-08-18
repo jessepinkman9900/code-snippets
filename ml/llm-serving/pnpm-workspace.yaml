@@ -1,0 +1,5 @@
+onlyBuiltDependencies:
+  - '@playwright/browser-chromium'
+  - better-sqlite3
+  - esbuild
+  - sharp

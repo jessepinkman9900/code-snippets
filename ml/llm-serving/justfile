@@ -1,3 +1,5 @@
+set shell := ["bash", "-c"]
+
 [private]
 default:
     just --list
@@ -60,16 +62,32 @@ init email:
   source ~/.bashrc
   # install tools
   sudo apt install -y htop sysstat net-tools
+  # install python packages
+  uv sync
+  # install npm packages
+  pnpm install
 
 [group('remote')]
 init-serving:
   # install vllm
-  uv sync && uv pip install vllm --torch-backend=auto
+  uv pip install vllm --torch-backend=auto
 
 [group('vllm')]
 vllm-up:
   cd docker && dotenvx run -f .env -- docker compose up -d
 
 [group('vllm')]
-vllm-eval tasks='gsm8k':
+vllm-lm-eval tasks='gsm8k':
   lm_eval --model local-completions --tasks {{tasks}} --model_args model=google/gemma-3-1b-it,base_url=http://localhost:8000/v1/completions,num_concurrent=8,max_retries=3,tokenized_requests=False
+
+[group('promptfoo')]
+pfoo-eval model='google/gemma-3-1b-it':
+  mkdir -p ./promptfoo/evals && pnpm promptfoo eval --output ./promptfoo/evals/$(date +%Y%m%d%H%M%S)-{{model}}.html
+
+[group('promptfoo')]
+pfoo-model-scan model='google/gemma-3-1b-it':
+  source .venv/bin/activate && pnpm promptfoo scan-model hf://{{model}}
+
+[group('promptfoo')]
+pfoo-view:
+  pnpm promptfoo view ./promptfoo -y

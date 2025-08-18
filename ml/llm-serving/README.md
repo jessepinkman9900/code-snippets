@@ -121,7 +121,7 @@ prometheus - http://prometheus.35.180.115.239.sslip.io
 mlflow - http://mlflow.35.180.115.239.sslip.io
 ```
 
-### Evals
+### Evals - LM Evaluation Harness
 ```bash
 just vllm-eval tasks='gsm8k'
 ```
@@ -130,4 +130,24 @@ just vllm-eval tasks='gsm8k'
 |-----|------:|----------------|-----:|-----------|---|-----:|---|-----:|
 |gsm8k|      3|flexible-extract|     5|exact_match|↑  |0.2563|±  | 0.012|
 |     |       |strict-match    |     5|exact_match|↑  |0.2555|±  | 0.012|
+```
+
+### Red-Teaming - Promptfoo
+```bash
+pnpm install
+pnpm promptfoo --version
+
+# if some big message comes
+pnpm approve-builds
+# accept all & try promptfoo --version again
+```
+```bash
+# eval
+just pfoo-eval model='google/gemma-3-1b-it'
+
+# view results
+just pfoo-view
+
+# model-scan hf model
+just pfoo-model-scan model='google/gemma-3-1b-it'
 ```
