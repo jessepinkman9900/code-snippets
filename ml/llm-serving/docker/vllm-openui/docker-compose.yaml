@@ -7,7 +7,7 @@ services:
       # - "443:443"
       # - "8123:8123"
       # - "8082:8082"
-      - "8080:8080" # traefik dashboard
+      # - "8080:8080" # traefik dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     command:
@@ -16,6 +16,7 @@ services:
       - --providers.docker.exposedbydefault=false
       # define entrypoints
       - --entrypoints.web.address=:80
+      # - --entrypoints.websecure.address=:443
       # enable dashboard
       - --api.dashboard=true
       - --api.insecure=true
@@ -25,7 +26,8 @@ services:
     labels:
       # dashboard config
       - "traefik.enable=true"
-      - "traefik.http.routers.dashboard.rule=PathPrefix(`/api`) || PathPrefix(`/dashboard`)"
+      - "traefik.http.routers.dashboard.entrypoints=web"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.${PUBLIC_IP_ADDRESS}.sslip.io`)"
       - "traefik.http.routers.dashboard.service=api@internal"
     networks:
       - traefik
@@ -51,7 +53,6 @@ services:
       "--max-num-batched-tokens", "4096",
       "--enable-chunked-prefill",
       "--dtype", "float16",
-      "--root-path", "/inference"
     ]
     # for debugging skipping reverse proxy
     # ports:
@@ -65,9 +66,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.services.vllm-inference.loadbalancer.server.port=8000"
       - "traefik.http.routers.vllm-inference.entrypoints=web"
-      - "traefik.http.routers.vllm-inference.rule=PathPrefix(`/inference`)"
-      - "traefik.http.routers.vllm-inference.middlewares=vllm-inference-pathstrip"
-      - "traefik.http.middlewares.vllm-inference-pathstrip.stripprefix.prefixes=/inference"
+      - "traefik.http.routers.vllm-inference.rule=Host(`vllm-server.${PUBLIC_IP_ADDRESS}.sslip.io`)"
     networks:
       - traefik
     healthcheck:
@@ -83,10 +82,17 @@ services:
     environment:
       - OPENAI_API_BASE_URL=http://vllm-server:8000/v1
       - WEBUI_AUTH=False
-    ports:
-      - "3000:8080"
+    # ports:
+    #   - "3000:8080"
+    expose:
+      - "8080"
     volumes:
       - ./.data-open-webui:/app/backend/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.open-webui-service.loadbalancer.server.port=8080"
+      - "traefik.http.routers.open-webui-service.entrypoints=web"
+      - "traefik.http.routers.open-webui-service.rule=Host(`chat.${PUBLIC_IP_ADDRESS}.sslip.io`)"
     networks:
       - traefik
     healthcheck:
@@ -99,21 +105,29 @@ services:
   # observability
   prometheus:
     image: prom/prometheus:v3.5.0
-    ports:
-      - "9090:9090"
+    # ports:
+    #   - "9090:9090"
+    expose:
+      - "9090"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.prometheus-service.loadbalancer.server.port=9090"
+      - "traefik.http.routers.prometheus-service.entrypoints=web"
+      - "traefik.http.routers.prometheus-service.rule=Host(`prometheus.${PUBLIC_IP_ADDRESS}.sslip.io`)"
     networks:
       - traefik
     
   grafana:
     image: grafana/grafana:9.5.1
     environment:
-      - GF_SERVER_ROOT_URL=http://localhost/grafana
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_INSTALL_PLUGINS=
-    ports:
-      - "3030:3000"
+    # ports:
+    #   - "3030:3000"
+    expose:
+      - "3000"
     volumes:
       - grafana-data:/var/lib/grafana
       - ./grafana-datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
@@ -123,9 +137,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.services.grafana-service.loadbalancer.server.port=3000"
       - "traefik.http.routers.grafana-service.entrypoints=web"
-      - "traefik.http.routers.grafana-service.rule=PathPrefix(`/grafana`)"
-      - "traefik.http.routers.grafana-service.middlewares=grafana-service-pathstrip"
-      - "traefik.http.middlewares.grafana-service-pathstrip.stripprefix.prefixes=/grafana"
+      - "traefik.http.routers.grafana-service.rule=Host(`grafana.${PUBLIC_IP_ADDRESS}.sslip.io`)"
     networks:
       - traefik
     depends_on:
@@ -136,10 +148,19 @@ services:
     image: ghcr.io/mlflow/mlflow:v3.2.0
     restart: unless-stopped
     command: mlflow server --host 0.0.0.0 --port 5000
-    ports:
-      - "5000:5000"
+    # ports:
+    #   - "5000:5000"
+    expose:
+      - "5000"
     volumes:
       - mlflow-data:/mlflow/mlruns
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.mlflow-service.loadbalancer.server.port=5000"
+      - "traefik.http.routers.mlflow-service.entrypoints=web"
+      - "traefik.http.routers.mlflow-service.rule=Host(`mlflow.${PUBLIC_IP_ADDRESS}.sslip.io`)"
+    networks:
+      - traefik
     # healthcheck:
     #   test: ["CMD", "curl", "-f", "http://mlflow:5000/health"]
     #   interval: 30s

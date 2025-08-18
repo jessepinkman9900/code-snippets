@@ -112,11 +112,13 @@ docker pull ghcr.io/open-webui/open-webui:v0.6.22
 cd docker/vllm-openui
 dotenvx run -f .env -- docker compose up -d
 
-# endpoints
-traefik dashboard http://<ip>:8080/dashboard
-open-webui http://<ip>:3000
-vllm-server http://<ip>:80/inference
-grafana http://<ip>:80/grafana
+# endpoints - replace 35.180.115.239 with your public ip of ec2 instance
+traefik dashboard - http://traefik.35.180.115.239.sslip.io/dashboard/
+open-webui - http://chat.35.180.115.239.sslip.io
+vllm-server - http://vllm-server.35.180.115.239.sslip.io/inference
+grafana - http://grafana.35.180.115.239.sslip.io
+prometheus - http://prometheus.35.180.115.239.sslip.io
+mlflow - http://mlflow.35.180.115.239.sslip.io
 ```
 
 ### Evals
