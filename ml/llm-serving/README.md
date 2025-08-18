@@ -1,4 +1,5 @@
 # LLM Serving
+![alt text](system.png)
 ## Note
 - [latitude.so](https://github.com/latitude-dev/latitude-llm) prompt management setup does not work
 
