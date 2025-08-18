@@ -1,7 +1,38 @@
 name: vllm-openui
 services:
+  traefik:
+    image: traefik:v3.5.0
+    ports:
+      - "80:80"
+      # - "443:443"
+      # - "8123:8123"
+      # - "8082:8082"
+      - "8080:8080" # traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command:
+      # enable docker provider
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      # define entrypoints
+      - --entrypoints.web.address=:80
+      # enable dashboard
+      - --api.dashboard=true
+      - --api.insecure=true
+      # enable access logs
+      - --accesslog=true
+      - --log.level=INFO
+    labels:
+      # dashboard config
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=PathPrefix(`/api`) || PathPrefix(`/dashboard`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+    networks:
+      - traefik
+    
   vllm-server:
     image: vllm/vllm-openai:v0.10.0
+    restart: unless-stopped
     runtime: nvidia
     deploy:
       resources:
@@ -10,13 +41,8 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
-    ports:
-      - "8000:8000"
-    volumes:
-      - ~/.cache/huggingface:/root/.cache/huggingface
     environment:
       - HUGGING_FACE_HUB_TOKEN=${HF_TOKEN}
-    ipc: host
     command: [
       "--model", "google/gemma-3-1b-it",
       "--gpu-memory-utilization", "0.9",
@@ -24,9 +50,26 @@ services:
       "--max-num-seqs", "32",
       "--max-num-batched-tokens", "4096",
       "--enable-chunked-prefill",
-      "--dtype", "float16"
+      "--dtype", "float16",
+      "--root-path", "/inference"
     ]
-    restart: unless-stopped
+    # for debugging skipping reverse proxy
+    # ports:
+    #   - "8000:8000"
+    expose:
+      - "8000"
+    volumes:
+      - ~/.cache/huggingface:/root/.cache/huggingface
+    ipc: host
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.vllm-inference.loadbalancer.server.port=8000"
+      - "traefik.http.routers.vllm-inference.entrypoints=web"
+      - "traefik.http.routers.vllm-inference.rule=PathPrefix(`/inference`)"
+      - "traefik.http.routers.vllm-inference.middlewares=vllm-inference-pathstrip"
+      - "traefik.http.middlewares.vllm-inference-pathstrip.stripprefix.prefixes=/inference"
+    networks:
+      - traefik
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
@@ -36,14 +79,16 @@ services:
 
   open-webui:
     image: ghcr.io/open-webui/open-webui:v0.6.22
+    restart: always
+    environment:
+      - OPENAI_API_BASE_URL=http://vllm-server:8000/v1
+      - WEBUI_AUTH=False
     ports:
       - "3000:8080"
     volumes:
       - ./.data-open-webui:/app/backend/data
-    environment:
-      - OPENAI_API_BASE_URL=http://vllm-server:8000/v1
-      - WEBUI_AUTH=False
-    restart: always
+    networks:
+      - traefik
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
@@ -58,31 +103,43 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - traefik
     
   grafana:
     image: grafana/grafana:9.5.1
+    environment:
+      - GF_SERVER_ROOT_URL=http://localhost/grafana
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=
     ports:
       - "3030:3000"
-    depends_on:
-      - prometheus
     volumes:
       - grafana-data:/var/lib/grafana
       - ./grafana-datasource.yml:/etc/grafana/provisioning/datasources/datasource.yml
       - ./grafana-dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
       - ./dashboard.json:/etc/grafana/dashboards/dashboard.json
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-      - GF_INSTALL_PLUGINS=
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.grafana-service.loadbalancer.server.port=3000"
+      - "traefik.http.routers.grafana-service.entrypoints=web"
+      - "traefik.http.routers.grafana-service.rule=PathPrefix(`/grafana`)"
+      - "traefik.http.routers.grafana-service.middlewares=grafana-service-pathstrip"
+      - "traefik.http.middlewares.grafana-service-pathstrip.stripprefix.prefixes=/grafana"
+    networks:
+      - traefik
+    depends_on:
+      - prometheus
 
   # mlflow
   mlflow:
     image: ghcr.io/mlflow/mlflow:v3.2.0
+    restart: unless-stopped
+    command: mlflow server --host 0.0.0.0 --port 5000
     ports:
       - "5000:5000"
     volumes:
       - mlflow-data:/mlflow/mlruns
-    command: mlflow server --host 0.0.0.0 --port 5000
-    restart: unless-stopped
     # healthcheck:
     #   test: ["CMD", "curl", "-f", "http://mlflow:5000/health"]
     #   interval: 30s
@@ -93,3 +150,7 @@ services:
 volumes:
   grafana-data:
   mlflow-data:
+
+networks:
+  traefik:
+    driver: bridge

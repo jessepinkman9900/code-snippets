@@ -111,6 +111,12 @@ docker pull ghcr.io/open-webui/open-webui:v0.6.22
 # docker compose up
 cd docker/vllm-openui
 dotenvx run -f .env -- docker compose up -d
+
+# endpoints
+traefik dashboard http://<ip>:8080/dashboard
+open-webui http://<ip>:3000
+vllm-server http://<ip>:80/inference
+grafana http://<ip>:80/grafana
 ```
 
 ### Evals
