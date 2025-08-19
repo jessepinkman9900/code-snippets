@@ -77,3 +77,23 @@ fleet-apply-cluster-group env="test":
 fleet-apply-gitrepo env="test":
   echo "Applying gitrepos"
   kubectl --kubeconfig terraform/environments/{{env}}/aws/1_rancher/.output/{{env}}/rancher_node/kube_config_server.yaml apply -f fleet/gitrepos/istio/istio-all.yaml
+
+# k3d - create cluster and setup docker network & rancher, certs
+[group("k3d")]
+k3d-create:
+	./docker/setup.sh
+
+# k3d - delete cluster and remove docker network
+[group("k3d")]
+k3d-down:
+	./docker/down.sh
+
+# k3d - start clusters
+[group("k3d")]
+k3d-start:
+	k3d cluster start -a
+
+# k3d - stop clusters
+[group("k3d")]
+k3d-stop:
+	k3d cluster stop -a

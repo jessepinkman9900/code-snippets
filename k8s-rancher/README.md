@@ -102,8 +102,8 @@ just fleet-apply-gitrepo env="test"
 ![](docs/images/fleet-gitrepo.png)
 ![](docs/images/fleet-istio-bundles.png)
 
-## Architecture
-### Network 
+### Architecture
+#### Network 
 - each private subnet has a NAT gateway to avoid central point of failure when the az containing the NAT gateway is in outage
 - subnets
   - 1 public subnet per az
@@ -190,6 +190,16 @@ graph TD
     public-subnet-me-south-1a <---> me-south-1-internet-gateway
     public-subnet-me-south-1b <---> me-south-1-internet-gateway
     public-subnet-me-south-1c <---> me-south-1-internet-gateway
+```
+
+## Local Clusters w k3d
+
+```sh
+just k3d-create
+# just k3d-down
+
+# set server url as 172.22.0.2.sslip.io in racher at bootstrap
+# manual registration of cluster - curl --insecure -sfL https://localhost/v3/import/[CLUSTER_ID].yaml | kubectl apply -f -
 ```
 
 ## Useful links
