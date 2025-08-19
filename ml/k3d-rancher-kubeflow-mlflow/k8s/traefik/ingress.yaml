@@ -1,0 +1,41 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard
+  namespace: kube-system
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`dashboard.traefik.127.0.0.1.sslip.io`)
+      kind: Rule
+      services:
+        - name: traefik-dashboard
+          port: 9000
+    - match: Host(`api.traefik.127.0.0.1.sslip.io`)
+      kind: Rule
+      services:
+        - name: traefik-dashboard
+          port: 9000
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard-tls
+  namespace: kube-system
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`dashboard.traefik.127.0.0.1.sslip.io`)
+      kind: Rule
+      services:
+        - name: traefik-dashboard
+          port: 9000
+    - match: Host(`api.traefik.127.0.0.1.sslip.io`)
+      kind: Rule
+      services:
+        - name: traefik-dashboard
+          port: 9000
+  tls:
+    secretName: traefik-dashboard-tls

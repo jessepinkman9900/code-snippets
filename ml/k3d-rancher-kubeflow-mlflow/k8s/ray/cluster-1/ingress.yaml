@@ -1,0 +1,31 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ray-dashboard
+  namespace: kuberay-cluster-1
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`ray-dashboard.127.0.0.1.sslip.io`)
+      kind: Rule
+      services:
+        - name: raycluster-kuberay-head-svc
+          port: 8265
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ray-dashboard-tls
+  namespace: kuberay-cluster-1
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`ray-dashboard.127.0.0.1.sslip.io`)
+      kind: Rule
+      services:
+        - name: raycluster-kuberay-head-svc
+          port: 8265
+  tls:
+    secretName: ray-dashboard-tls

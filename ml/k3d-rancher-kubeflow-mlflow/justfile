@@ -1,0 +1,32 @@
+[private]
+default:
+	just --list
+
+# k3d - create cluster and setup docker network & rancher, certs
+[group("k3d")]
+k3d-create:
+	k3d cluster create k8s-mlflow --image rancher/k3s:v1.31.5-k3s1 --port "80:80@loadbalancer" --port "443:443@loadbalancer" --api-port 6443 --servers 1
+
+# k3d - delete cluster and remove docker network
+[group("k3d")]
+k3d-down:
+	k3d cluster delete k8s-mlflow
+
+# k3d - start clusters
+[group("k3d")]
+k3d-start:
+	k3d cluster start k8s-mlflow
+
+# k3d - stop clusters
+[group("k3d")]
+k3d-stop:
+	k3d cluster stop k8s-mlflow
+
+# helmfile - apply releases
+[group("helmfile")]
+helmfile-apply: helmfile-init
+	cd helmfile && helmfile apply
+
+[group("helmfile")]
+helmfile-init:
+	cd helmfile && helmfile init

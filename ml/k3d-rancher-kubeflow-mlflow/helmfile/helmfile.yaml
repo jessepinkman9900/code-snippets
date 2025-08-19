@@ -1,0 +1,28 @@
+repositories:
+  - name: istio
+    url: https://istio-release.storage.googleapis.com/charts
+  - name: kuberay
+    url: https://ray-project.github.io/kuberay-helm
+releases:
+  - name: istio-base
+    namespace: istio-system
+    createNamespace: true
+    chart: istio/base
+    version: ~1.25.4
+  - name: istiod
+    namespace: istio-system
+    createNamespace: true
+    chart: istio/istiod
+    version: ~1.25.4
+    wait: true
+    timeout: 120
+  - name: kuberay
+    namespace: kuberay-system
+    createNamespace: true
+    chart: kuberay/kuberay-operator
+    version: ~1.4.0
+  - name: raycluster
+    namespace: kuberay-cluster-1
+    createNamespace: true
+    chart: kuberay/ray-cluster
+    version: ~1.4.0
